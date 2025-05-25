@@ -1,0 +1,17 @@
+<h2 class="p-8 mt-2 flex justify-center font-satisfy text-green-800 text-3xl">{{dialogTitle}}</h2>
+<mat-dialog-content>
+  <div class="!mb-5 w-full text-green-700 text-xl font-montserrat font-medium">
+    {{dialogText}}
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button
+    mat-button
+    color="primary"
+    (click)="onConfirm()"
+    >
+    Confirmar
+  </button>
+</mat-dialog-actions>

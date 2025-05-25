@@ -1,0 +1,43 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Satisfy&display=swap');
+
+
+/* Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+   margin: 0;
+   font-family: 'Montserrat', cursive, Roboto, "Helvetica Neue", sans-serif;
+   background: var(--color-violet-200);
+   overflow-x: hidden;
+}
+
+.font-satisfy {
+   font-family: 'Satisfy', cursive;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', cursive;
+}
+
+.mdc-switch__track::after {
+  background: #c3f2b6 !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #c3f2b6 !important;
+}
+
+.mat-mdc-unelevated-button:not(:disabled) {
+    background-color: green !important;
+}
+
+.mat-mdc-progress-spinner {
+   --mdc-circular-progress-active-indicator-color: green;
+}
