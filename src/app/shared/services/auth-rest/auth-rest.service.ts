@@ -15,10 +15,11 @@ export class AuthRestService implements IAuthService {
 
   constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string): Observable<Login> {
+  login(email: string, password: string, code: string): Observable<Login> {
     const data = {
       email: email,
-      password: password
+      password: password,
+      code: code
     }
     return this.httpClient.post<Login>(`${this.LOGIN_URL}`, data);
   }

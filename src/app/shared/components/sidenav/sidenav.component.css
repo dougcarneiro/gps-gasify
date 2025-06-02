@@ -1,0 +1,23 @@
+.sidenav-container {
+  height: calc(100vh - 64px); /* Adjust 64px if your toolbar height is different */
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #92d4f2; /* Example background color */
+}
+
+.sidenav-content {
+  padding: 20px;
+}
+
+.active-list-item {
+  background-color: rgba(83, 151, 28, 0.04); /* Example active item background */
+  font-weight: bold;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure toolbar stays on top */
+}

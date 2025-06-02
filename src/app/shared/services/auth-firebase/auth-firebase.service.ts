@@ -3,35 +3,55 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Login } from '../../types/Login';
 import { removeUserData } from '../../../utils/localStorage';
-import { from, map, Observable } from 'rxjs';
+import { from, map, Observable, switchMap } from 'rxjs';
 import { IAuthService } from '../../../interfaces/auth-service.interface';
+import { UserProfileOperationFirebaseService } from '../user-profile-operation-firebase/user-profile-operation-firebase.service';
+import { UserProfileOperation } from '../../model/UserProfileOperation';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthFirebaseService implements IAuthService {
-  constructor(private afAuth: AngularFireAuth, private router: Router) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    private router: Router,
+    private userProfileOperationService: UserProfileOperationFirebaseService,
+  ) {}
 
-  login(email: string, password: string): Observable<Login> {
+  login(email: string, password: string, code: string): Observable<Login> {
     return from(
       this.afAuth.signInWithEmailAndPassword(email, password)
     ).pipe(
-      map(userCredential => {
+      switchMap(userCredential => {
         const user = userCredential.user;
         if (!user) {
           throw new Error('Usuário não encontrado');
         }
-        return {
-          accessToken: user.refreshToken,
-          user: {
-            id: user.uid,
-            email: user.email || "",
-          }
-        } as Login;
+
+        // Busca a relação do usuário com a operação
+        return this.userProfileOperationService.buscarPorEmailEOperacao(email, code).pipe(
+          map(operationProfile => {
+            if (!operationProfile) {
+              throw new Error('Operação não encontrada para o usuário ou código de acesso inválido');
+            }
+
+            return {
+              accessToken: user.refreshToken,
+              user: {
+                id: user.uid,
+                email: user.email || "",
+              },
+              operationId: operationProfile.operationId,
+              role: operationProfile.function,
+              roleId: operationProfile.id,
+            } as Login;
+          })
+        );
       })
-    );
+    )
   }
+
   register(name: string, email: string, password: string): Observable<Login> {
     return from(
       this.afAuth.createUserWithEmailAndPassword(email, password)

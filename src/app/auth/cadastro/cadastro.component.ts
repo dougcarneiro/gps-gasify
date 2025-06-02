@@ -1,9 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { MensagemSnackService } from '../../shared/services/message/snack.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { saveUserData } from '../../utils/localStorage';
-import { IAuthService } from '../../interfaces/auth-service.interface';
+import { ColaboradorService } from '../../shared/services/colaborador/colaborador.service';
 
 
 @Component({
@@ -17,6 +15,8 @@ export class CadastroComponent {
     nomeFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
     emailFormControl: FormControl = new FormControl('', [Validators.required, Validators.email]);
     passwordFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+    operationNameFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+    operationSlugFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
     readonly registerForm = new FormGroup({
       nome: this.nomeFormControl,
@@ -25,17 +25,18 @@ export class CadastroComponent {
   });
 
   submitButtonStatus = false;
-  submitButtonText = 'Entrar';
+  submitButtonText = 'Enviar';
   isLoading = false;
 
   emailErrorMessage = signal('');
   passwordErrorMessage = signal('');
   nomeErrorMessage = signal('');
+  operationNameErrorMessage = signal('');
+  operationSlugErrorMessage = signal('');
 
   constructor(
-    private authService: IAuthService,
     private snackService: MensagemSnackService,
-    private router: Router,
+    private colaboradorService: ColaboradorService,
   ) { }
 
   checkForm() {
@@ -43,13 +44,15 @@ export class CadastroComponent {
     this.emailUpdateErrorMessage();
     this.passwordUpdateErrorMessage();
     this.nomeUpdateErrorMessage();
+    this.operationNameUpdataErrorMessage();
+    this.operationSlugUpdataErrorMessage();
     this.submitButtonStatus = this.nomeFormControl.valid && this.emailFormControl.valid && this.passwordFormControl.valid;
   }
 
   toggleLoading() {
     this.isLoading = !this.isLoading;
     this.submitButtonStatus = !this.submitButtonStatus;
-    this.submitButtonText = this.isLoading ? '' : 'Entrar';
+    this.submitButtonText = this.isLoading ? '' : 'Enviar';
   }
 
   emailUpdateErrorMessage() {
@@ -86,34 +89,54 @@ export class CadastroComponent {
     if (this.nomeFormControl.hasError('required')) {
       this.nomeErrorMessage.set('Você precisa digitar um nome.');
     } else if (this.nomeFormControl.hasError('minlength')) {
-      this.nomeErrorMessage.set('O nome deve ter no mínimo 6 caracteres.');
+      this.nomeErrorMessage.set('O nome deve ter no mínimo 3 caracteres.');
     } else {
       this.nomeErrorMessage.set('');
     }
   }
 
-  onSubmit() {
+  operationNameUpdataErrorMessage() {
+    this.trimFormValues();
+    if (this.operationNameFormControl.hasError('required')) {
+      this.operationNameErrorMessage.set('Você precisa digitar o nome da sua operação.');
+    } else if (this.nomeFormControl.hasError('minlength')) {
+      this.operationNameErrorMessage.set('O nome da deve ter no mínimo 6 caracteres.');
+    } else {
+      this.operationNameErrorMessage.set('');
+    }
+  }
+
+  operationSlugUpdataErrorMessage() {
+    this.trimFormValues();
+    if (this.operationSlugFormControl.hasError('required')) {
+      this.operationSlugErrorMessage.set('Você precisa digitar código de acesso da operação.');
+    } else if (this.nomeFormControl.hasError('minlength')) {
+      this.operationSlugErrorMessage.set('O código deve ter no mínimo 6 caracteres.');
+    } else {
+      this.operationSlugErrorMessage.set('');
+    }
+  }
+
+  async onSubmit() {
     this.nomeFormControl.markAllAsTouched();
     if (this.registerForm.invalid) {
-      return
+      return;
     }
 
     this.toggleLoading();
 
-    this.authService.register(
-      this.nomeFormControl.value!,
-      this.emailFormControl.value!,
-      this.passwordFormControl.value!,
-      ).subscribe({
-      next: (register) => {
-        this.snackService.sucesso('Cadastro realizado com sucesso');
-        saveUserData(register);
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        this.toggleLoading();
-        this.snackService.erro(error.message);
-      }
-    });
+    try {
+      this.colaboradorService.cadastrarNovoUsuarioEOperacao(
+        this.nomeFormControl.value,
+        this.emailFormControl.value,
+        this.passwordFormControl.value,
+        this.operationNameFormControl.value,
+        this.operationSlugFormControl.value
+      )
+
+    } catch (error: any) {
+      this.toggleLoading();
+      this.snackService.erro(error.message || 'Erro durante o cadastro');
+    }
   }
 }

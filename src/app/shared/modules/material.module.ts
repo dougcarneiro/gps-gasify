@@ -11,6 +11,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [],
@@ -30,6 +33,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
       MatDatepickerModule,
       MatSlideToggleModule,
       MatProgressSpinnerModule,
+      MatSidenavModule,
+      MatListModule,
+      MatToolbarModule,
   ],
   exports: [
     MatFormFieldModule,
@@ -46,6 +52,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatDatepickerModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
   ]
 })
 export class MaterialModule { }

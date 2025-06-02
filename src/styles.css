@@ -14,7 +14,7 @@ html, body { height: 100%; }
 body {
    margin: 0;
    font-family: 'Montserrat', cursive, Roboto, "Helvetica Neue", sans-serif;
-   background: var(--color-violet-200);
+   background: var(--color-blue-200);
    overflow-x: hidden;
 }
 
@@ -26,7 +26,8 @@ body {
   font-family: 'Montserrat', cursive;
 }
 
-.mdc-switch__track::after {
+
+/* .mdc-switch__track::after {
   background: #c3f2b6 !important;
 }
 
@@ -35,9 +36,9 @@ body {
 }
 
 .mat-mdc-unelevated-button:not(:disabled) {
-    background-color: green !important;
+    background-color: blue !important;
 }
 
 .mat-mdc-progress-spinner {
-   --mdc-circular-progress-active-indicator-color: green;
-}
+   --mdc-circular-progress-active-indicator-color: blue;
+} */

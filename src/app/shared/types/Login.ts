@@ -1,6 +1,11 @@
+import { Operation } from "../model/Operation"
+
 export type Login = {
-  accessToken: string,
+  accessToken: string
   user: User
+  operationId: string
+  role: 'proprietário' | 'administrador' | 'gerente' | 'frentista'
+  roleId: string
 }
 
 type User = {

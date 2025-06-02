@@ -5,6 +5,8 @@ import { CadastroComponent } from './auth/cadastro/cadastro.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { HomeComponent } from './home/home.component';
+import { ColaboradorListagemComponent } from './colaboradores/colaborador-listagem/colaborador-listagem.component';
+import { ColaboradoresComponent } from './colaboradores/colaboradores.component';
 
 const routes: Routes = [
   {
@@ -21,9 +23,15 @@ const routes: Routes = [
     path: '',
     component: HomeComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: 'colaboradores', // Esta rota será acessível como /colaboradores
+        component: ColaboradoresComponent,
+        // O AuthGuard é herdado da rota pai '' (HomeComponent)
+      }
+    ]
   },
-  { path: '**', redirectTo: '' }
-
+  { path: '**', redirectTo: '' } // Rota curinga
 ];
 
 @NgModule({

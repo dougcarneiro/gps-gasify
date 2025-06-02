@@ -1,0 +1,21 @@
+
+<div class="container mx-auto p-4">
+  <div class="hidden md:block text-right mb-4">
+    <button mat-fab extended
+    (click)="openDialog()"
+      class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !py-2 !px-4 !rounded"
+    >
+      <mat-icon>add</mat-icon>
+      Adicionar
+    </button>
+  </div>
+  <div class="block md:hidden">
+    <button mat-fab
+    (click)="openDialog()"
+      class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !py-2 !px-4 !rounded"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <app-colaborador-listagem/>
+</div>

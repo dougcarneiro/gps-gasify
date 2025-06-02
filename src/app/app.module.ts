@@ -15,6 +15,9 @@ import { DialogModule } from './shared/components/dialog/dialog.module';
 import { FirebaseModule } from './firestore/firestore.module';
 import { IAuthService } from './interfaces/auth-service.interface';
 import { AuthFirebaseService } from './shared/services/auth-firebase/auth-firebase.service';
+import { SidenavModule } from './shared/components/sidenav/sidenav.module';
+import { HomeModule } from './home/home.module';
+import { ColaboradoresModule } from './colaboradores/colaboradores.module';
 
 
 @NgModule({
@@ -31,6 +34,9 @@ import { AuthFirebaseService } from './shared/services/auth-firebase/auth-fireba
     FormsModule,
     DialogModule,
     FirebaseModule,
+    HomeModule,
+    SidenavModule,
+    ColaboradoresModule,
   ],
   providers: [
     provideHttpClient(),
