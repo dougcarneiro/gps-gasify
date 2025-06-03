@@ -31,7 +31,7 @@ export class UserProfileOperationFirebaseService {
         });
     }
 
-     listar(): Observable<UserProfileOperation[]> {
+    listar(): Observable<UserProfileOperation[]> {
         return runInInjectionContext(this.injetor, () => {
             return this.collectionUserProfileOperation.valueChanges({idField: 'id'});
         });

@@ -98,6 +98,25 @@ export class ColaboradorService {
   // If a "colaborador" can also create a new operation, then this more complex logic might be relevant,
   // but it would need to be invoked with all necessary form controls or parameters.
 
+async atualizarColaborador(email: string, dados: Partial<Colaborador>): Promise<void> {
+  try {
+    const userProfile = await this.userProfileService.pesquisarPorEmail(email).toPromise();
+    if (!userProfile || !userProfile.id) {
+      throw new Error('Perfil do colaborador não encontrado');
+    }
+
+    await this.userProfileService.atualizar({
+      id: userProfile.id,
+      name: dados.nome,
+      email: dados.email
+    } as UserProfile).toPromise();
+
+    this.snackService.sucesso('Colaborador atualizado com sucesso!');
+  } catch (error: any) {
+    this.snackService.erro(error.message || 'Erro ao atualizar colaborador');
+    throw error;
+  }
+}
   async cadastrarNovoUsuarioEOperacao(
     nomeFormControlValue: string,
     emailFormControlValue: string,

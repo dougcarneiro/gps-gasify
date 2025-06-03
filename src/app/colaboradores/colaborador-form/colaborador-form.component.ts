@@ -51,30 +51,39 @@ export class ColaboradorFormComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    this.formTitle = this.data?.formTitle ?? 'Novo Colaborador';
+
+    if (this.data != null && this.data.colaborador !=null) {
       this.isEditMode = true;
-      // this.colaboradorService.getColaboradorById(id).subscribe(colaborador => {
-      //   if (colaborador) {
-      //     this.colaborador = colaborador;
-      //     this.form.patchValue(colaborador);
-      //     if (!this.isEditMode) { // Se não estiver em modo de edição (novo), a senha é obrigatória
-      //       this.form.get('senha')?.setValidators([Validators.required, Validators.minLength(6)]);
-      //     } else {
-      //       this.form.get('senha')?.clearValidators(); // Limpa validadores da senha em modo de edição
-      //       this.form.get('senha')?.updateValueAndValidity();
-      //     }
-      //   }
-      // });
+      this.colaborador = this.data.colaborador;
+      this.form.patchValue({
+        nome: this.colaborador?.nome,
+        funcao: this.colaborador?.funcao,
+        email: this.colaborador?.email,    
+      });
+
+      this.form.get('senha')?.clearValidators();
+      this.form.get('senha')?.updateValueAndValidity();
+    } else {
+      this.isEditMode = false;
+      this.form.get('senha')?.setValidators([Validators.required, Validators.minLength(6)]);
+      this.form.get('senha')?.updateValueAndValidity();
     }
   }
 
   async onSubmit(): Promise<void> {
-    if (this.form.valid && !this.isLoading) {
-      const { nome, email, funcao, senha } = this.form.value;
-
-      this.toggleLoading();
-      try {
+  if (this.form.valid && !this.isLoading) {
+    const { nome, email, funcao, senha } = this.form.value;
+    this.toggleLoading();
+    try {
+      if (this.isEditMode && this.colaborador?.email) {
+        console.log(this.colaborador.email)
+        await this.colaboradorService.atualizarColaborador(
+          this.colaborador.email,
+          { nome, email, funcao }
+        );
+        this.mensagemService.sucesso('Colaborador atualizado com sucesso!');
+      } else {
         await this.colaboradorService.cadastrarColaborador(
           nome,
           email,
@@ -82,19 +91,15 @@ export class ColaboradorFormComponent implements OnInit {
           senha
         );
         this.mensagemService.sucesso('Colaborador salvo com sucesso!');
-        this.submit.emit({ nome, email, funcao, senha });
-        this.dialogRef.close({ success: true, data: { nome, email, funcao, senha } });
-      } catch (err: any) {
-        console.error(err);
-        let errorMessage = 'Erro ao salvar colaborador.';
-        if (err && err.message) {
-          errorMessage = err.message;
-        }
-        this.mensagemService.erro(errorMessage);
-        this.toggleLoading();
       }
+      this.submit.emit({ nome, email, funcao });
+      this.dialogRef.close({ success: true, data: { nome, email, funcao } });
+    } catch (err: any) {
+      // ...tratamento de erro...
+      this.toggleLoading();
     }
   }
+}
 
   toggleLoading() {
     this.isLoading = !this.isLoading;

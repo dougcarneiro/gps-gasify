@@ -47,11 +47,14 @@ export class ColaboradoresComponent implements OnInit {
     ];
   }
 
-  openDialog(): void {
+  openDialog(colaborador?: Colaborador): void {
     const dialogRef = this.dialog.open(ColaboradorFormComponent, {
       width: '30rem',
-      data: { formTitle: 'Novo Colaborador' },
-    });
+      data: {
+        formTitle: colaborador ? 'Editar Colaborador' : 'Novo Colaborador',
+        colaborador: colaborador || null
+    },
+  });
 
     dialogRef.componentInstance.submit.subscribe((formData: any) => {
       // const data: Colaborador = {

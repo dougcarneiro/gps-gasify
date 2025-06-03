@@ -57,14 +57,11 @@ export class ColaboradorListagemComponent implements OnInit {
     }
   }
 
-  editarColaborador(id: string | undefined): void {
-    // Lógica para navegar para a página de edição do colaborador
-    if (id) {
-      console.log('Editar colaborador com ID:', id);
-      // this.router.navigate(['/colaboradores/editar', id]); // Exemplo com Angular Router
-    } else {
-      console.error('ID do colaborador não definido.');
-    }
+  @Output() editar = new EventEmitter<Colaborador>();
+
+  editarColaborador(colaborador: Colaborador): void {
+    console.log(colaborador.email);
+    this.editar.emit(colaborador);
   }
 
   excluirColaborador(id: string | undefined): void {

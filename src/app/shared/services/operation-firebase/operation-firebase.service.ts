@@ -2,7 +2,6 @@ import { inject, Injectable, Injector, runInInjectionContext } from '@angular/co
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from "@angular/fire/compat/firestore";
 import { from, map, Observable, switchMap } from 'rxjs';
 import { Operation } from '../../model/Operation';
-import { UserProfileOperation } from '../../model/UserProfileOperation';
 
 
 @Injectable({
