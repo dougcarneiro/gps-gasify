@@ -1,6 +1,7 @@
 export class Colaborador {
   id?: string;
-  nome?: string;
-  funcao?: 'proprietário' | 'administrador' | 'gerente' | 'frentista' | undefined;
-  email?: string;
+  nome!: string;
+  funcao!: 'proprietário' | 'administrador' | 'gerente' | 'frentista';
+  senha?: string;
+  email!: string;
 }

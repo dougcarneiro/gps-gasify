@@ -1,6 +1,6 @@
 import { inject, Injectable, Injector, runInInjectionContext } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, DocumentReference } from "@angular/fire/compat/firestore";
-import { from, map, Observable, switchMap } from 'rxjs';
+import { from, map, Observable, of, switchMap } from 'rxjs';
 import { UserProfile } from '../../model/UserProfile';
 import { Operation } from '../../model/Operation';
 
@@ -15,8 +15,6 @@ export class UserProfileFirebaseService {
   private collectionUserProfile: AngularFirestoreCollection<UserProfile>;
   USER_PROFILE_COLLECTION = 'userProfile';
 
-
-
   constructor(
     private firestore: AngularFirestore,
   ) {
@@ -29,6 +27,20 @@ export class UserProfileFirebaseService {
      listar(): Observable<UserProfile[]> {
         return runInInjectionContext(this.injetor, () => {
             return this.collectionUserProfile.valueChanges({idField: 'id'});
+        });
+    }
+
+    obterOuCriar(userProfile: UserProfile): Observable<UserProfile> {
+        return runInInjectionContext(this.injetor, () => {
+            return this.pesquisarPorEmail(userProfile.email!).pipe(
+                switchMap(existingProfile => {
+                    if (existingProfile) {
+                        return of(existingProfile);
+                    } else {
+                        return this.cadastrar(userProfile);
+                    }
+                })
+            );
         });
     }
 
@@ -79,16 +91,12 @@ export class UserProfileFirebaseService {
         });
     }
 
-    buscarPorEmail(email: string): Observable<UserProfile | undefined> {
-        return this.pesquisarPorEmail(email);
-    }
-
-
     atualizar(userProfile: UserProfile): Observable<void> {
       userProfile.updatedAt = new Date();
         return runInInjectionContext(this.injetor, () => {
             return from(this.collectionUserProfile.doc(userProfile.id).update({...userProfile}));
         });
     }
+
 
 }

@@ -15,13 +15,14 @@
         <mat-error *ngIf="form.get('email')?.hasError('required')">Informe um email válido</mat-error>
         <mat-error *ngIf="form.get('email')?.hasError('email')">Formato de email inválido</mat-error>
       </mat-form-field>
-
-      <mat-form-field class="w-full mb-3">
-        <mat-label>Senha</mat-label>
-        <input maxlength="100" matInput formControlName="senha" placeholder="Senha" type="password" />
-        <mat-error *ngIf="form.get('senha')?.hasError('required')">Informe uma senha</mat-error>
-        <mat-error *ngIf="form.get('senha')?.hasError('minlength')">A senha deve ter pelo menos 6 caracteres</mat-error>
-      </mat-form-field>
+      @if (!isEditMode) {
+        <mat-form-field class="w-full mb-3">
+          <mat-label>Senha</mat-label>
+          <input maxlength="100" matInput formControlName="senha" placeholder="Senha" type="password" />
+          <mat-error *ngIf="form.get('senha')?.hasError('required')">Informe uma senha</mat-error>
+          <mat-error *ngIf="form.get('senha')?.hasError('minlength')">A senha deve ter pelo menos 6 caracteres</mat-error>
+        </mat-form-field>
+      }
 
       <mat-form-field class="w-full mb-3">
         <mat-label>Função</mat-label>

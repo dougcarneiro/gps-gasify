@@ -3,7 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Login } from '../../types/Login';
 import { removeUserData } from '../../../utils/localStorage';
-import { from, map, Observable, switchMap } from 'rxjs';
+import { from, map, Observable, switchMap, of, throwError } from 'rxjs';
 import { IAuthService } from '../../../interfaces/auth-service.interface';
 import { UserProfileOperationFirebaseService } from '../user-profile-operation-firebase/user-profile-operation-firebase.service';
 import { UserProfileOperation } from '../../model/UserProfileOperation';

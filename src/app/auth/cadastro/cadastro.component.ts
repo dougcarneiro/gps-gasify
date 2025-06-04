@@ -66,9 +66,9 @@ export class CadastroComponent {
   }
 
   trimFormValues() {
-    this.nomeFormControl.setValue(this.nomeFormControl.value.trim());
     this.emailFormControl.setValue(this.emailFormControl.value.trim());
     this.passwordFormControl.setValue(this.passwordFormControl.value.trim());
+    this.operationSlugFormControl.setValue(this.operationSlugFormControl.value.trim());
   }
 
   passwordUpdateErrorMessage() {
@@ -133,6 +133,7 @@ export class CadastroComponent {
         this.operationNameFormControl.value,
         this.operationSlugFormControl.value
       )
+      this.snackService.sucesso('Cadastro realizado com sucesso!');
 
     } catch (error: any) {
       this.toggleLoading();

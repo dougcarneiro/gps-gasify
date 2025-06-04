@@ -15,9 +15,9 @@
       <!-- Os dados dos colaboradores serão inseridos aqui -->
        @for (colaborador of colaboradores; track colaborador.email) {
         <tr>
-          <td class="py-2 px-4 border-b border-r border-gray-200">{{ colaborador.nome }}</td>
+          <td class="py-2 px-4 border-b border-r border-gray-200">{{ colaborador.name }}</td>
           <td class="py-2 px-4 border-b border-r border-gray-200">{{ colaborador.email }}</td>
-          <td class="py-2 px-4 border-b border-r border-gray-200">{{ colaborador.funcao | titlecase }}</td>
+          <td class="py-2 px-4 border-b border-r border-gray-200">{{ colaborador.function | titlecase }}</td>
           <td class="py-2 px-4 border-b text-center">
             <div class="flex justify-center space-x-4">
               <button
@@ -27,7 +27,7 @@
                 </mat-icon>
               </button>
               <button
-                (click)="excluirColaborador(colaborador.id)"
+                (click)="removerColaborador(colaborador.idUserProfileOperation!)"
               >
                 <mat-icon class="!m-auto !text-red-600">delete
                 </mat-icon>

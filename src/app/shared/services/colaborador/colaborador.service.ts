@@ -4,13 +4,14 @@ import { IAuthService } from '../../../interfaces/auth-service.interface';
 import { OperationFirebaseService } from '../operation-firebase/operation-firebase.service';
 import { UserProfileFirebaseService } from '../user-profile-firebase/user-profile-firebase.service';
 import { UserProfileOperationFirebaseService } from '../user-profile-operation-firebase/user-profile-operation-firebase.service';
-import { MensagemSnackService } from '../message/snack.service';
 import { getCurrentUserData, saveUserData } from '../../../utils/localStorage';
 import { UserProfile } from '../../model/UserProfile';
 import { Operation } from '../../model/Operation';
 import { UserProfileOperation } from '../../model/UserProfileOperation';
 import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 import { Colaborador } from '../../model/Colaborador';
+import { UserProfileListing } from '../../types/UserProfileListing';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +22,18 @@ export class ColaboradorService {
     private operationService: OperationFirebaseService,
     private userProfileService: UserProfileFirebaseService,
     private userProfileOperationService: UserProfileOperationFirebaseService,
-    private snackService: MensagemSnackService,
     private router: Router
   ) { }
+
+  async verificarSeTemPermissao(): Promise<UserProfileOperation> {
+    const operationRoleParent: UserProfileOperation | undefined = await this.userProfileOperationService.verificarUserAdmin(getCurrentUserData().roleId).toPromise();
+
+    if (!operationRoleParent) {
+      throw new Error('Você não tem permissão para realizar essa operação');
+    }
+
+    return operationRoleParent;
+  }
 
   async cadastrarColaborador(
     nome: string,
@@ -31,41 +41,27 @@ export class ColaboradorService {
     funcao: string,
     password: string,
   ): Promise<void> {
-    // Simplified version of the logic provided for registering a new user,
-    // adapted for adding a "colaborador" (employee/collaborator).
-    // This assumes that a "colaborador" is a new user associated with an existing operation.
-    // Further adjustments might be needed based on the exact requirements for "colaborador" registration.
-
+     const operationRoleParent: UserProfileOperation | undefined = await this.verificarSeTemPermissao();
     try {
-      // 1. Register the new user (colaborador)
-      // For a "colaborador", we might not need a new password, or it might be auto-generated / set later.
-      // This part needs clarification: Does a "colaborador" have their own login credentials initially?
-      // Assuming for now that a "colaborador" is a user who will set their password later or has a default.
-      // The authService.register method might need to be adapted or a different method used.
-      // For this example, I'm creating a placeholder password.
 
-      const operationRoleParent: UserProfileOperation | undefined = await this.userProfileOperationService.verificarSeUserPodeCriar(getCurrentUserData().roleId).toPromise();
+      // 1. Checks if user is already on the platform
+      const alreadyRegistered = await this.userProfileService.pesquisarPorEmail(email).toPromise();
+      if (!alreadyRegistered) {
+        const registerResult = await this.authService.register(
+          nome,
+          email,
+          password
+        ).toPromise();
+        if (!registerResult || !registerResult.user) {
+          throw new Error('Erro ao registrar novo colaborador como usuário');
+        }
 
-      if (!operationRoleParent) {
-        throw new Error('Você não tem permissão para cadastrar um colaborador.');
-      }
-
-
-      const registerResult = await this.authService.register(
-        nome,
-        email,
-        password
-      ).toPromise();
-
-      if (!registerResult || !registerResult.user) {
-        throw new Error('Erro ao registrar novo colaborador como usuário');
       }
 
       // 2. Create UserProfile for the "colaborador"
-      const userProfileResult = await this.userProfileService.cadastrar({
+      const userProfileResult = await this.userProfileService.obterOuCriar({
         name: nome,
         email: email,
-        userId: registerResult.user.id,
       } as UserProfile).toPromise();
 
       if (!userProfileResult || !userProfileResult.id) {
@@ -81,39 +77,36 @@ export class ColaboradorService {
         isAdmin: false, // Assuming "colaborador" is not an admin by default
       } as UserProfileOperation).toPromise();
 
-      this.snackService.sucesso('Colaborador cadastrado com sucesso');
       // What happens after a "colaborador" is registered? Navigate somewhere?
       // this.router.navigate(['/some-path']); // Example navigation
 
     } catch (error: any) {
-      this.snackService.erro(error.message || 'Erro durante o cadastro do colaborador');
       // Rethrow or handle as needed
       throw error;
     }
   }
 
-  // The following is the direct adaptation of the provided logic.
-  // It seems to be for a new user *and* a new operation, which might not be what's intended for "colaborador.service.ts".
-  // If this service is strictly for "colaboradores" of an *existing* operation, the logic above is more appropriate.
-  // If a "colaborador" can also create a new operation, then this more complex logic might be relevant,
-  // but it would need to be invoked with all necessary form controls or parameters.
 
-async atualizarColaborador(email: string, dados: Partial<Colaborador>): Promise<void> {
+async atualizarColaborador(dados: UserProfileListing): Promise<void> {
+  await this.verificarSeTemPermissao();
   try {
-    const userProfile = await this.userProfileService.pesquisarPorEmail(email).toPromise();
+    const userProfile = await this.userProfileService.pesquisarPorEmail(dados.email!).toPromise();
     if (!userProfile || !userProfile.id) {
       throw new Error('Perfil do colaborador não encontrado');
     }
 
     await this.userProfileService.atualizar({
       id: userProfile.id,
-      name: dados.nome,
-      email: dados.email
+      name: dados.name,
+      email: dados.email,
     } as UserProfile).toPromise();
 
-    this.snackService.sucesso('Colaborador atualizado com sucesso!');
+    await this.userProfileOperationService.atualizar({
+      id: dados.idUserProfileOperation,
+      function: dados.function,
+    } as UserProfileOperation).toPromise();
+
   } catch (error: any) {
-    this.snackService.erro(error.message || 'Erro ao atualizar colaborador');
     throw error;
   }
 }
@@ -158,7 +151,6 @@ async atualizarColaborador(email: string, dados: Partial<Colaborador>): Promise<
       const userProfileResult = await this.userProfileService.cadastrar({
         name: nomeFormControlValue,
         email: emailFormControlValue,
-        userId: registerResult.user.id,
       } as UserProfile).toPromise();
 
       if (!userProfileResult || !userProfileResult.id) {
@@ -187,17 +179,32 @@ async atualizarColaborador(email: string, dados: Partial<Colaborador>): Promise<
         throw new Error('ID do relação usuário-operação não foi gerado corretamente');
       }
 
-      this.snackService.sucesso('Cadastro realizado com sucesso');
       saveUserData({...registerResult, operationId: operationResult.id, roleId: userProfileOperationResult.id, role: 'proprietário'});
       this.router.navigate(['/']);
 
     } catch (error: any) {
-      this.snackService.erro(error.message || 'Erro durante o cadastro');
       throw error; // Rethrow to allow the component to handle UI changes like loading state
     }
   }
 
-  carregarColaboradores(operationId: string): Observable<Colaborador[]> {
+  carregarColaboradores(operationId: string): Observable<UserProfile[]> {
     return this.userProfileOperationService.listarColaboradoresComDetalhes(operationId);
+  }
+
+  async remover(id: string): Promise<Observable<void>> {
+    await this.verificarSeTemPermissao();
+    try {
+      return this.userProfileOperationService.remover(id).pipe(
+        // Show success message on completion
+        tap(() => {
+        // Handle errors and show error message
+        catchError((error: any) => {
+          throw error;
+        })
+        })
+      );
+    } catch (error: any) {
+      throw error;
+    }
   }
 }

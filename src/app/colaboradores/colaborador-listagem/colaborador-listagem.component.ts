@@ -1,88 +1,84 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectorRef } from '@angular/core';
 import { Colaborador } from '../../shared/model/Colaborador';
 import { ColaboradorService } from '../../shared/services/colaborador/colaborador.service';
-import { getCurrentUserData } from '../../utils/localStorage';
+import { ColaboradorFormComponent } from '../colaborador-form/colaborador-form.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MensagemSnackService } from '../../shared/services/message/snack.service';
+import { DialogComponent } from '../../shared/components/dialog/dialog.component';
+import { toggleState } from '../../utils/loading.util';
+import { UserProfile } from '../../shared/model/UserProfile';
+import { UserProfileListing } from '../../shared/types/UserProfileListing';
 
 @Component({
   selector: 'app-colaborador-listagem',
   standalone: false,
   templateUrl: './colaborador-listagem.component.html',
 })
-export class ColaboradorListagemComponent implements OnInit {
-  @Input() tasks: Colaborador[] = [];
-  @Output() delete = new EventEmitter<Colaborador>();
+export class ColaboradorListagemComponent {
+  @Input() colaboradores: UserProfileListing[] = [];
+  @Input() semColaboradoresLabel = '';
+  @Input() isLoading = false;
 
-  @Input() noTasksLabel = '';
+  @Output() delete = new EventEmitter<string>();
+  @Output() editar = new EventEmitter<Colaborador>();
+  @Output() reload = new EventEmitter<void>();
 
-  isLoading = false;
-  colaboradores: Colaborador[] = [];
+  dialogRef!: MatDialogRef<ColaboradorFormComponent>;
 
   constructor(
+    private dialog: MatDialog,
     private colaboradorService: ColaboradorService,
-    private cdr: ChangeDetectorRef // Injetado ChangeDetectorRef
+    private snackService: MensagemSnackService,
+
   ) {}
 
-  ngOnInit(): void {
-    this.carregarColaboradores();
-  }
+  async editarColaborador(colaborador: UserProfileListing): Promise<void> {
+     const dialogRef = this.dialog.open(ColaboradorFormComponent, {
+      width: '30rem',
+      data: { formTitle: 'Atualizar Colaborador', colaborador: colaborador, isEditMode: true },
+    });
 
-  carregarColaboradores(): void {
-    this.isLoading = true;
+    dialogRef.componentInstance.submit.subscribe((formData: any) => {
+      const data: UserProfileListing = {
+        idUserProfileOperation: colaborador.idUserProfileOperation,
+        name: formData.nome,
+        function: formData.funcao,
+        email: formData.email ? formData.email : colaborador.email,
+        operationId: colaborador.operationId!,
+      }
 
-    const currentUserData = getCurrentUserData();
-    if (currentUserData && currentUserData.operationId) {
-      this.colaboradorService.carregarColaboradores(currentUserData.operationId).subscribe({
-        next: dados => {
-          this.colaboradores = dados.map(dado => ({
-            ...dado,
-            funcao: dado.funcao as 'proprietário' | 'administrador' | 'gerente' | 'frentista' | undefined
-          }));
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        },
-        error: (err) => {
-          console.error('Erro ao carregar colaboradores:', err);
-          this.colaboradores = [];
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        }
+    toggleState(dialogRef);
+
+    this.colaboradorService.atualizarColaborador(data)
+      .then((updatedColaborador) => {
+        this.snackService.sucesso('Colaborador atualizado com sucesso!');
+        this.reload.emit();
+        dialogRef.close();
+      })
+      .catch((error) => {
+        console.error('Erro ao atualizar colaborador:', error);
+        this.snackService.erro('Erro ao atualizar colaborador: ' + error.message);
+        toggleState(dialogRef);
       });
-    } else {
-      console.error('Não foi possível obter operationId do usuário atual.');
-      this.colaboradores = [];
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    }
+    });
   }
 
-  @Output() editar = new EventEmitter<Colaborador>();
 
-  editarColaborador(colaborador: Colaborador): void {
-    console.log(colaborador.email);
-    this.editar.emit(colaborador);
+  removerColaborador(id: string): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '30rem',
+      data: {
+        dialogTitle: 'Remover Colaborador',
+        dialogText: 'Deseja realmente remover este colaborador?'
+      },
+    });
+
+    dialogRef.componentInstance.dialogActionConfirm.subscribe(
+      () => {
+        this.delete.emit(id);
+        dialogRef.close();
+      }
+    );
   }
 
-  excluirColaborador(id: string | undefined): void {
-    // Lógica para excluir o colaborador
-    if (id) {
-      console.log('Excluir colaborador com ID:', id);
-      // this.colaboradorService.excluir(id).subscribe(() => {
-      //   this.carregarColaboradores(); // Recarrega a lista após a exclusão
-      // });
-      // Para demonstração, remove da lista local:
-      this.colaboradores = this.colaboradores.filter(c => c.id !== id);
-    } else {
-      console.error('ID do colaborador não definido.');
-    }
-  }
-
-  onDelete(colaborador: Colaborador): void {
-    const index = this.colaboradores.findIndex(t => t.id === colaborador.id);
-    if (index !== -1) {
-      this.colaboradores.splice(index, 1);
-    }
-    this.delete.emit(colaborador);
-  }
 }

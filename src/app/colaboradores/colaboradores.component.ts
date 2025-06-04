@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { getCurrentUserData, removeUserData } from '../utils/localStorage';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MensagemSnackService } from '../shared/services/message/snack.service';
 import { Router } from '@angular/router';
 import { ColaboradorFormComponent } from './colaborador-form/colaborador-form.component';
 import { Colaborador } from '../shared/model/Colaborador';
+import { ColaboradorService } from '../shared/services/colaborador/colaborador.service';
+import { toggleState } from '../utils/loading.util';
+import { UserProfileListing } from '../shared/types/UserProfileListing';
 
 @Component({
   selector: 'app-colaboradores',
@@ -13,16 +16,19 @@ import { Colaborador } from '../shared/model/Colaborador';
 })
 export class ColaboradoresComponent implements OnInit {
 
-  colaboradores: Array<Colaborador> = [];
+  colaboradores: Array<UserProfileListing> = [];
   noColaboradorLabel = 'Nenhum colaborador cadastrado.'
+
+  isLoading = false;
 
   userId!: string;
   dialogRef!: MatDialogRef<ColaboradorFormComponent>;
 
-
   constructor(
     private dialog: MatDialog,
     private snackService: MensagemSnackService,
+    private colaboradorService: ColaboradorService,
+    private cdr: ChangeDetectorRef,
     private router: Router,
   ) {}
 
@@ -33,53 +39,64 @@ export class ColaboradoresComponent implements OnInit {
   }
 
   getColaboradores(filtro: string = '', arrayCheckbox: string[] = []): void {
-    // if (filtro !== '' || arrayCheckbox.length > 0) {
-    //   this.noColaboradorLabel = 'Nenhum afazer encontrado.';
-    // }
-    // this.colaboradorService.listar(this.userId, filtro, arrayCheckbox).subscribe(
-    //   (tasks) => {
-    //     this.tasks = tasks;
-    // })
-    this.colaboradores = [
-      { id: '1', nome: 'João Silva', email: 'joao.silva@example.com', funcao: 'gerente' },
-      { id: '2', nome: 'Maria Oliveira', email: 'maria.oliveira@example.com', funcao: 'frentista' },
-      { id: '3', nome: 'Carlos Pereira', email: 'carlos.pereira@example.com', funcao: 'gerente' }
-    ];
+    this.isLoading = true;
+
+    const currentUserData = getCurrentUserData();
+    if (currentUserData && currentUserData.operationId) {
+      this.colaboradorService.carregarColaboradores(currentUserData.operationId).subscribe({
+        next: dados => {
+          this.colaboradores = dados
+            .filter((dado: UserProfileListing) => dado.function !== undefined)
+            .map((dado: UserProfileListing) => ({
+              ...dado,
+              funcao: dado.function as 'proprietário' | 'administrador' | 'gerente' | 'frentista'
+            }));
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Erro ao carregar colaboradores:', err);
+          this.colaboradores = [];
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+    } else {
+      console.error('Não foi possível obter operationId do usuário atual.');
+      this.colaboradores = [];
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   }
 
-  openDialog(colaborador?: Colaborador): void {
+  novoColaboradorDialog(): void {
     const dialogRef = this.dialog.open(ColaboradorFormComponent, {
       width: '30rem',
-      data: {
-        formTitle: colaborador ? 'Editar Colaborador' : 'Novo Colaborador',
-        colaborador: colaborador || null
-    },
-  });
+      data: { formTitle: 'Novo Colaborador' },
+    });
 
     dialogRef.componentInstance.submit.subscribe((formData: any) => {
-      // const data: Colaborador = {
-      //   titulo: formData.title,
-      //   descricao: formData.text,
-      //   prioridade: formData.priority,
-      //   status: 'pendente',
-      //   donoId: this.userId,
-      //   dueDate: formData.dueDate,
-      //   dataCriacao: new Date(),
-      //   dataAlteracao: new Date(),
-      //   removido: false,
-      // }
+      const data: Colaborador = {
+        nome: formData.nome,
+        funcao: formData.funcao,
+        email: formData.email,
+        senha: formData.senha,
+      }
 
-      // this.colaboradorService.inserir(data).subscribe({
-        // next: (task) => {
-        //   this.snackService.sucesso('Afazer criado!');
-        //   this.getColaboradores();
-        //   dialogRef.close();
-        // },
-        // error: (error) => {
-        //   this.snackService.erro('Erro ao tentar criar afazer.');
-        // }
+    toggleState(dialogRef);
+    this.colaboradorService.cadastrarColaborador(
+        data.nome, data.email, data.funcao, data.senha!
+      ).then(() => {
+        this.snackService.sucesso('Colaborador adicionado com sucesso!');
+        this.getColaboradores();
+        dialogRef.close();
+      }).catch((error) => {
+        console.error('Erro ao criar colaborador:', error);
+        this.snackService.erro('Erro ao tentar criar colaborador: ' + error.message);
+        toggleState(dialogRef);
       });
-    // });
+    });
+
 
     dialogRef.afterClosed().subscribe(result => {
     });
@@ -89,15 +106,17 @@ export class ColaboradoresComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  onDelete(colaborador: Colaborador): void {
-    // this.colaboradorService.remover(task).subscribe({
-    //   next: () => {
-    //   this.snackService.sucesso('Afazer removido!');
-    //   },
-    //   error: (error) => {
-    //   this.snackService.erro('Erro ao tentar remover afazer.');
-    //   }
-    // });
+  async onDelete(id: string): Promise<void> {
+    this.isLoading = true;
+    await this.colaboradorService.remover(id).then(() => {
+        this.snackService.sucesso('Colaborador removido com sucesso!');
+        this.getColaboradores();
+        this.isLoading = false;
+      }).catch((error) => {
+        console.error('Erro ao criar colaborador:', error);
+        this.snackService.erro('Erro ao tentar criar colaborador: ' + error.message);
+        this.isLoading = false;
+      });
   }
 
   logout(): void {

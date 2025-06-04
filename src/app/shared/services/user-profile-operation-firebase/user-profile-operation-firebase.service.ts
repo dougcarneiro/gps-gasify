@@ -94,7 +94,7 @@ export class UserProfileOperationFirebaseService {
         });
     }
 
-    verificarSeUserPodeCriar(roleId: string): Observable<UserProfileOperation | undefined> {
+    verificarUserAdmin(roleId: string): Observable<UserProfileOperation | undefined> {
       return this.pesquisarPorId(roleId).pipe(
         map(operationRole => {
           if (operationRole && operationRole.isAdmin) {
@@ -122,6 +122,7 @@ export class UserProfileOperationFirebaseService {
 
     atualizar(userProfileOperation: UserProfileOperation): Observable<void> {
         userProfileOperation.updatedAt = new Date();
+        userProfileOperation.isAdmin = userProfileOperation.function === "proprietário" || userProfileOperation.function === "administrador";
         return runInInjectionContext(this.injetor, () => {
             return from(this.collectionUserProfileOperation.doc(userProfileOperation.id).update({...userProfileOperation}));
         });
@@ -130,7 +131,7 @@ export class UserProfileOperationFirebaseService {
     buscarPorEmailEOperacao(email: string, operationSlug: string): Observable<UserProfileOperation | undefined> {
         return runInInjectionContext(this.injetor, () => {
             // Primeiro busca o perfil do usuário pelo email
-            return this.userProfileFirebaseService.buscarPorEmail(email).pipe(
+            return this.userProfileFirebaseService.pesquisarPorEmail(email).pipe(
                 switchMap(userProfile => {
                     if (!userProfile || !userProfile.id) { // Added null/undefined check for userProfile.id
                         return from([undefined]);
@@ -152,7 +153,7 @@ export class UserProfileOperationFirebaseService {
         });
     }
 
-    listarColaboradoresComDetalhes(operationId?: string): Observable<Colaborador[]> {
+    listarColaboradoresComDetalhes(operationId?: string): Observable<UserProfile[]> {
         return runInInjectionContext(this.injetor, () => {
             const sourceObservable = operationId ? this.listarPorOperationId(operationId) : this.listar();
             return sourceObservable.pipe(
@@ -161,17 +162,18 @@ export class UserProfileOperationFirebaseService {
                         return of([]);
                     }
                     const observables = userProfileOperations
-                        .filter(upo => upo.userProfileId != null) // Ensure userProfileId is not null or undefined
+                        .filter(upo => upo.userProfileId != null && upo.function !== undefined) // Ensure userProfileId and function are not null or undefined
                         .map(upo => {
                             return this.userProfileFirebaseService.pesquisarPorId(upo.userProfileId!) // Added non-null assertion operator
                             .pipe(
-                                map((userProfile: UserProfile | undefined) => { // Explicitly type userProfile
+                                map((userProfile: UserProfile | undefined) => {
+                                    // Provide a default value for funcao if needed, or skip if undefined
                                     return {
-                                        // UserProfile model does not have 'nome'. Email is available.
-                                        id: upo.id, // Added id for reference
-                                        nome: userProfile?.email, // Using email as name, adjust if a name field is added to UserProfile
-                                        email: userProfile?.email,
-                                        funcao: upo.function // Corrected to use 'function' field from UserProfileOperation
+                                        idUserProfileOperation: upo.id ?? '',
+                                        name: userProfile?.name ?? '',
+                                        email: userProfile?.email ?? '',
+                                        function: upo.function as "proprietário" | "administrador" | "gerente" | "frentista",
+                                        operationId: upo.operationId ?? '',
                                     };
                                 })
                             );

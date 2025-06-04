@@ -1,8 +1,7 @@
-
 <div class="container mx-auto p-4">
   <div class="hidden md:block text-right mb-4">
     <button mat-fab extended
-    (click)="openDialog()"
+    (click)="novoColaboradorDialog()"
       class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !py-2 !px-4 !rounded"
     >
       <mat-icon>add</mat-icon>
@@ -11,11 +10,17 @@
   </div>
   <div class="block md:hidden">
     <button mat-fab
-    (click)="openDialog()"
+    (click)="novoColaboradorDialog()"
       class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !py-2 !px-4 !rounded"
     >
       <mat-icon>add</mat-icon>
     </button>
   </div>
-  <app-colaborador-listagem (editar)="openDialog($event)"></app-colaborador-listagem>
+  <app-colaborador-listagem
+    [colaboradores]="colaboradores"
+    [isLoading]="isLoading"
+    (reload)="getColaboradores()"
+    (delete)="onDelete($event)"
+    [semColaboradoresLabel]="noColaboradorLabel">
+  </app-colaborador-listagem>
 </div>
