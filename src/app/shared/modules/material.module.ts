@@ -14,6 +14,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [],
@@ -36,6 +38,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
       MatSidenavModule,
       MatListModule,
       MatToolbarModule,
+      MatTableModule,
+      MatSortModule,
   ],
   exports: [
     MatFormFieldModule,
@@ -55,6 +59,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatSidenavModule,
     MatListModule,
     MatToolbarModule,
+    MatTableModule,
+    MatSortModule,
   ]
 })
 export class MaterialModule { }

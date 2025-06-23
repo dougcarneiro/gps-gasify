@@ -6,8 +6,7 @@ import { ColaboradorFormComponent } from './colaborador-form/colaborador-form.co
 import { MaterialModule } from '../shared/modules/material.module';
 import { ColaboradorListagemComponent } from './colaborador-listagem/colaborador-listagem.component';
 import { ColaboradoresComponent } from './colaboradores.component';
-// Importe aqui o componente de listagem quando for criado
-// import { ColaboradorListComponent } from './colaborador-list/colaborador-list.component';
+import { GenericTableModule } from '../shared/components/generic-table/generic-table.module';
 
 const routes: Routes = [
   // {
@@ -36,6 +35,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
+    GenericTableModule,
   ]
 })
 export class ColaboradoresModule { }

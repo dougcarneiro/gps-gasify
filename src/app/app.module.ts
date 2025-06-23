@@ -18,6 +18,7 @@ import { AuthFirebaseService } from './shared/services/auth-firebase/auth-fireba
 import { SidenavModule } from './shared/components/sidenav/sidenav.module';
 import { HomeModule } from './home/home.module';
 import { ColaboradoresModule } from './colaboradores/colaboradores.module';
+import { GenericTableModule } from './shared/components/generic-table/generic-table.module';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { ColaboradoresModule } from './colaboradores/colaboradores.module';
     HomeModule,
     SidenavModule,
     ColaboradoresModule,
+    GenericTableModule,
   ],
   providers: [
     provideHttpClient(),

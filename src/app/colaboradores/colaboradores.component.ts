@@ -8,6 +8,7 @@ import { Colaborador } from '../shared/model/Colaborador';
 import { ColaboradorService } from '../shared/services/colaborador/colaborador.service';
 import { toggleState } from '../utils/loading.util';
 import { UserProfileListing } from '../shared/types/UserProfileListing';
+import { DialogComponent } from '../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-colaboradores',
@@ -35,10 +36,9 @@ export class ColaboradoresComponent implements OnInit {
   ngOnInit(): void {
     this.userId = getCurrentUserData().user.id;
     this.getColaboradores();
-
   }
 
-  getColaboradores(filtro: string = '', arrayCheckbox: string[] = []): void {
+  getColaboradores(): void {
     this.isLoading = true;
 
     const currentUserData = getCurrentUserData();
@@ -96,8 +96,6 @@ export class ColaboradoresComponent implements OnInit {
         toggleState(dialogRef);
       });
     });
-
-
     dialogRef.afterClosed().subscribe(result => {
     });
   }
@@ -107,16 +105,63 @@ export class ColaboradoresComponent implements OnInit {
   }
 
   async onDelete(id: string): Promise<void> {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '30rem',
+      data: {
+        dialogTitle: 'Remover Colaborador',
+        dialogText: 'Deseja realmente remover este colaborador?'
+      },
+    });
+
+    dialogRef.componentInstance.dialogActionConfirm.subscribe(
+      async () => {
+        await this.remove(id);
+        dialogRef.close();
+      }
+    );
+  }
+
+  async remove(id: string): Promise<void> {
     this.isLoading = true;
     await this.colaboradorService.remover(id).then(() => {
-        this.snackService.sucesso('Colaborador removido com sucesso!');
         this.getColaboradores();
+        this.snackService.sucesso('Colaborador removido com sucesso!');
         this.isLoading = false;
       }).catch((error) => {
         console.error('Erro ao criar colaborador:', error);
         this.snackService.erro('Erro ao tentar criar colaborador: ' + error.message);
         this.isLoading = false;
       });
+  }
+
+  async onEdit(colaborador: UserProfileListing): Promise<void> {
+     const dialogRef = this.dialog.open(ColaboradorFormComponent, {
+      width: '30rem',
+      data: { formTitle: 'Atualizar Colaborador', colaborador: colaborador, isEditMode: true },
+    });
+
+    dialogRef.componentInstance.submit.subscribe((formData: any) => {
+      const data: UserProfileListing = {
+        idUserProfileOperation: colaborador.idUserProfileOperation,
+        name: formData.nome,
+        function: formData.funcao,
+        email: formData.email ? formData.email : colaborador.email,
+        operationId: colaborador.operationId!,
+      }
+
+    toggleState(dialogRef);
+
+    this.colaboradorService.atualizarColaborador(data)
+      .then((updatedColaborador) => {
+        this.snackService.sucesso('Colaborador atualizado com sucesso!');
+        dialogRef.close();
+      })
+      .catch((error) => {
+        console.error('Erro ao atualizar colaborador:', error);
+        this.snackService.erro('Erro ao atualizar colaborador: ' + error.message);
+        toggleState(dialogRef);
+      });
+    });
   }
 
   logout(): void {
