@@ -1,0 +1,57 @@
+<mat-toolbar color="primary" class="sticky top-0 z-[1000] flex items-center justify-between px-4">
+  <!-- Left section: Icon and Title -->
+  <div class="flex items-center">
+    <a routerLink="/"
+       routerLinkActive="active-toolbar-link"
+       [routerLinkActiveOptions]="{exact: true}"
+       class="flex items-center px-3 py-2 rounded-md text-sm !bg-transparent">
+       <mat-icon svgIcon="menuIcon" class="text-gray-800 mr-3 h-6 w-6"></mat-icon>
+       <span class="text-blue-800 font-satisfy text-xl">Gasify</span>
+    </a>
+  </div>
+
+  <!-- Right section: Desktop Navigation -->
+  <div class="hidden md:flex items-center space-x-1">
+    <a *ngFor="let item of menuItems"
+       mat-button
+       [routerLink]="item.route"
+       routerLinkActive="active-toolbar-link"
+       [routerLinkActiveOptions]="{exact: true}"
+       class="text-gray-800 hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm">
+      {{ item.name }}
+    </a>
+    <mat-divider [vertical]="true" class="h-6 self-center border-gray-400 mx-2"></mat-divider>
+    <a mat-button
+       routerLink="/"
+       (click)="logout()"
+       class="text-gray-800 hover:bg-black hover:bg-opacity-10 px-3 py-2 rounded-md text-sm">
+      <mat-icon class="!mr-0 md:mr-1">exit_to_app</mat-icon>
+      <span class="hidden md:block">Sair</span>
+    </a>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="md:hidden">
+    <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Abrir menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #mobileMenu="matMenu">
+      <a *ngFor="let item of menuItems"
+         mat-menu-item
+         [routerLink]="item.route"
+         routerLinkActive="active-toolbar-link"
+         [routerLinkActiveOptions]="{exact: true}">
+        <span>{{ item.name }}</span>
+      </a>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Sair</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>
+
+<div class="p-3 md:p-5">
+  <router-outlet></router-outlet>
+</div>

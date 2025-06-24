@@ -4,6 +4,8 @@ import { MaterialModule } from '../shared/modules/material.module';
 import { HomeComponent } from './home.component';
 import { SidenavModule } from '../shared/components/sidenav/sidenav.module';
 import { RouterModule } from '@angular/router'; // Importar RouterModule
+import { NavbarModule } from '../shared/components/navbar/navbar.module';
+import { PageCardModule } from '../shared/components/page-card/page-card.module';
 
 
 
@@ -15,7 +17,9 @@ import { RouterModule } from '@angular/router'; // Importar RouterModule
     CommonModule,
     MaterialModule,
     SidenavModule,
-    RouterModule // Adicionar RouterModule aos imports
+    NavbarModule,
+    RouterModule,
+    PageCardModule,
   ]
 })
 export class HomeModule { }

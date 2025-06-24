@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { ColaboradorListagemComponent } from './colaboradores/colaborador-listagem/colaborador-listagem.component';
 import { ColaboradoresComponent } from './colaboradores/colaboradores.component';
 import { ProdutoComponent } from './produtos/produto.component';
+import { WelcomeCardComponent } from './shared/components/welcome-card/welcome-card.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard],
     children: [
+      {
+        path: '',
+        component: WelcomeCardComponent,
+      },
       {
         path: 'colaboradores',
         component: ColaboradoresComponent,

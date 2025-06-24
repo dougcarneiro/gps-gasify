@@ -7,6 +7,7 @@ import { GenericTableModule } from '../shared/components/generic-table/generic-t
 import { ProdutoFormComponent } from './produto-form/produto-form.component';
 import { ProdutoListagemComponent } from './produto-listagem/produto-listagem.component';
 import { ProdutoComponent } from './produto.component';
+import { PageCardModule } from '../shared/components/page-card/page-card.module';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     GenericTableModule,
+    PageCardModule,
   ]
 })
 export class ProdutoModule { }

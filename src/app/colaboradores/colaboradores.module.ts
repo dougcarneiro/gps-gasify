@@ -7,6 +7,7 @@ import { MaterialModule } from '../shared/modules/material.module';
 import { ColaboradorListagemComponent } from './colaborador-listagem/colaborador-listagem.component';
 import { ColaboradoresComponent } from './colaboradores.component';
 import { GenericTableModule } from '../shared/components/generic-table/generic-table.module';
+import { PageCardModule } from '../shared/components/page-card/page-card.module';
 
 const routes: Routes = [
   // {
@@ -36,6 +37,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     GenericTableModule,
+    PageCardModule,
   ]
 })
 export class ColaboradoresModule { }

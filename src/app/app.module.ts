@@ -20,6 +20,9 @@ import { HomeModule } from './home/home.module';
 import { ColaboradoresModule } from './colaboradores/colaboradores.module';
 import { GenericTableModule } from './shared/components/generic-table/generic-table.module';
 import { ProdutoModule } from './produtos/produto.module';
+import { NavbarModule } from './shared/components/navbar/navbar.module';
+import { PageCardModule } from './shared/components/page-card/page-card.module';
+import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card.module';
 
 
 @NgModule({
@@ -38,9 +41,12 @@ import { ProdutoModule } from './produtos/produto.module';
     FirebaseModule,
     HomeModule,
     SidenavModule,
+    NavbarModule,
     ColaboradoresModule,
     GenericTableModule,
     ProdutoModule,
+    PageCardModule,
+    WelcomeCardModule,
   ],
   providers: [
     provideHttpClient(),

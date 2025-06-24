@@ -49,7 +49,6 @@ export class GenericTableComponent {
   }
 
   onEdit(element: any): void {
-    console.log('Edit:', element);
     this.edit.emit(element);
   }
 

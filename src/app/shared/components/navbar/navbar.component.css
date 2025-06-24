@@ -1,0 +1,12 @@
+.active-toolbar-link {
+  background-color: rgba(83, 151, 28, 0.1);
+  font-weight: bold;
+}
+
+mat-toolbar .mat-icon {
+  vertical-align: middle;
+}
+
+mat-toolbar button.mat-button, mat-toolbar a.mat-button {
+  min-width: auto;
+}

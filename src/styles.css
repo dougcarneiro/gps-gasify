@@ -14,7 +14,6 @@ html, body { height: 100%; }
 body {
    margin: 0;
    font-family: 'Montserrat', cursive, Roboto, "Helvetica Neue", sans-serif;
-   background: var(--color-blue-200);
    overflow-x: hidden;
 }
 
@@ -25,6 +24,23 @@ body {
 .font-montserrat {
   font-family: 'Montserrat', cursive;
 }
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/gasify-background.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    filter: blur(4px);
+    z-index: -1;
+}
+
+
 
 
 /* .mdc-switch__track::after {

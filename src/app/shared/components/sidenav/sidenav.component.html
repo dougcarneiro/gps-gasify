@@ -1,12 +1,17 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="!bg-transparent">
+
   <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon svgIcon="menuIcon" class="text-gray-800 mr-3 h-6 w-6"></mat-icon>
   </button>
-  <span class="text-blue-800 !text-3xl font-satisfy">Gasify</span>
+  <a routerLink="/"
+       routerLinkActive="active-toolbar-link"
+       [routerLinkActiveOptions]="{exact: true}">
+  <span class="!text-blue-800 !text-2xl !font-bold !font-satisfy">Gasify</span>
+  </a>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" opened class="sidenav">
+  <mat-sidenav #sidenav mode="side" opened class="sidenav !bg-blue-200 !border-0">
     <mat-nav-list>
       <a mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active-list-item">
         <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
