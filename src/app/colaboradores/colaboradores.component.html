@@ -2,12 +2,11 @@
   <app-page-card>
     <div class="container mx-auto p-4">
       <div class="text-right">
-        <button mat-fab extended
+        <button mat-fab
         (click)="novoColaboradorDialog()"
-          class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !px-4 !rounded"
+          class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !px-4 !rounded-full"
         >
           <mat-icon>add</mat-icon>
-          <span class="hidden md:block">Adicionar</span>
         </button>
         <app-colaborador-listagem
           [colaboradores]="colaboradores"

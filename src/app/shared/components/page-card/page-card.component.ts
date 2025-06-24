@@ -9,5 +9,6 @@ import { Component, Input } from '@angular/core';
 export class PageCardComponent {
 
   @Input() height: string = '30rem';
+  @Input() width: string = '60rem';
 
 }
