@@ -1,17 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { IAuthService } from '../../../interfaces/auth-service.interface';
-import { OperationFirebaseService } from '../operation-firebase/operation-firebase.service';
-import { UserProfileFirebaseService } from '../user-profile-firebase/user-profile-firebase.service';
 import { UserProfileOperationFirebaseService } from '../user-profile-operation-firebase/user-profile-operation-firebase.service';
-import { getCurrentUserData, saveUserData } from '../../../utils/localStorage';
+import { getCurrentUserData } from '../../../utils/localStorage';
 import { Produto, TipoUnidadeProduto } from '../../model/Produto';
-import { Operation } from '../../model/Operation';
 import { UserProfileOperation } from '../../model/UserProfileOperation';
 import { Observable } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
-import { Colaborador } from '../../model/Colaborador';
-import { UserProfileListing } from '../../types/UserProfileListing';
 import { ProdutoFirebaseService } from '../produto-firebase/produto-firebase.service';
 
 @Injectable({
@@ -33,12 +25,27 @@ export class ProdutoService {
     return operationRoleParent;
   }
 
+  carregarProdutos(operationId: string): Observable<Produto[]> {
+    return this.produtoFirebaseService.listarPorOperacao(operationId);
+  }
+
+  async listarProdutos(operationId: string): Promise<Produto[]> {
+    const operationRoleParent: UserProfileOperation | undefined = await this.verificarSeTemPermissao();
+    try {
+      return (await this.produtoFirebaseService.listarPorOperacao(operationId).toPromise()) ?? [];
+    } catch (error) {
+      console.error('Erro ao listar produtos:', error);
+      throw new Error('Erro ao listar produtos');
+    }
+  }
+
   async cadastrarProduto(
     operationId: string,
     descricao: string,
     precoPorUnidade: number,
     tipoUnidade: TipoUnidadeProduto,
     quantidadeEstoque: number,
+    createdBy: string
   ): Promise<void> {
     const operationRoleParent: UserProfileOperation | undefined = await this.verificarSeTemPermissao();
     if (!operationRoleParent) {
@@ -52,7 +59,7 @@ export class ProdutoService {
         precoPorUnidade: precoPorUnidade,
         tipoUnidade: tipoUnidade,
         quantidadeEstoque: quantidadeEstoque,
-        createdBy: getCurrentUserData().roleId,
+        createdBy: createdBy || getCurrentUserData().roleId,
       } as Produto).toPromise();
 
     } catch (error) {

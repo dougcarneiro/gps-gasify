@@ -12,12 +12,14 @@ export class DialogComponent {
 
   @Input() dialogTitle!: string;
   @Input() dialogText!: string;
+  @Input() isLoading = false;
+  @Input() submitButtonText = 'Confirmar';
   @Output() dialogActionConfirm = new EventEmitter();
 
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-        private dialogRef: MatDialogRef<DialogComponent>
+    private dialogRef: MatDialogRef<DialogComponent>
   ) {
     this.dialogTitle = data.dialogTitle;
     this.dialogText = data.dialogText;

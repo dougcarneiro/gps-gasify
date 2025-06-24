@@ -5,7 +5,7 @@ export class Produto {
   precoPorUnidade!: number;
   tipoUnidade!: TipoUnidadeProduto;
   quantidadeEstoque!: number;
-  isActive!: boolean;
+  status!: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   createdBy?: string; // Creator UserProfileOperation ID

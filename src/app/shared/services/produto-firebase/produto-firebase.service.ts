@@ -33,7 +33,7 @@ export class ProdutoFirebaseService {
   cadastrar(produto: Produto): Observable<Produto> {
     produto.createdAt = new Date();
     produto.updatedAt = produto.createdAt;
-    produto.isActive = true; // Default value for isActive
+    produto.status = true; // Default value for status
     delete produto.id;
     return from(this.collectionProduct.add({ ...produto })).pipe(
       switchMap((docRef: DocumentReference<Produto>) => docRef.get()),
@@ -77,7 +77,7 @@ export class ProdutoFirebaseService {
     });
   }
 
-  pesquisarPorOperacao(operationId: string): Observable<Produto[]> {
+  listarPorOperacao(operationId: string): Observable<Produto[]> {
     return runInInjectionContext(this.injetor, () => {
       return from(
         this.collectionProduct.ref.where('operationId', '==', operationId).get()

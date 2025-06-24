@@ -6,12 +6,17 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-button [disabled]="isLoading" (click)="onCancel()">Cancelar</button>
   <button
     mat-button
+    [disabled]="isLoading"
     color="primary"
     (click)="onConfirm()"
     >
-    Confirmar
+    @if (isLoading) {
+      <mat-spinner diameter="24" [strokeWidth]="3" active-indicator-color="bg-blue-100" />
+    } @else {
+      {{ submitButtonText }}
+    }
   </button>
 </mat-dialog-actions>

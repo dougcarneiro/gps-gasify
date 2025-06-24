@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthFirebaseService } from '../../services/auth-firebase/auth-firebase.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sidenav',
@@ -19,7 +21,14 @@ export class SidenavComponent {
 
   constructor(
     private authService: AuthFirebaseService,
-  ) { }
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      'menuIcon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('gas-station.svg')
+    );
+  }
 
   logout() {
     this.authService.logout()

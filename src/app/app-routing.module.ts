@@ -7,6 +7,7 @@ import { NoAuthGuard } from './shared/guards/no-auth.guard';
 import { HomeComponent } from './home/home.component';
 import { ColaboradorListagemComponent } from './colaboradores/colaborador-listagem/colaborador-listagem.component';
 import { ColaboradoresComponent } from './colaboradores/colaboradores.component';
+import { ProdutoComponent } from './produtos/produto.component';
 
 const routes: Routes = [
   {
@@ -25,9 +26,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'colaboradores', // Esta rota será acessível como /colaboradores
+        path: 'colaboradores',
         component: ColaboradoresComponent,
-        // O AuthGuard é herdado da rota pai '' (HomeComponent)
+      },
+      {
+        path: 'produtos',
+        component: ProdutoComponent,
       }
     ]
   },

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 export interface ColumnConfig {
   key: string;
@@ -8,6 +9,7 @@ export interface ColumnConfig {
   sortable?: boolean;
   pipe?: any;
   pipeArgs?: any[];
+  isBoolean?: boolean;
 }
 
 @Component({
@@ -33,6 +35,7 @@ export class GenericTableComponent {
 
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
+  @Output() statusChange = new EventEmitter<any>();
 
   dataSource = new MatTableDataSource<any>([]);
 
@@ -46,10 +49,15 @@ export class GenericTableComponent {
   }
 
   onEdit(element: any): void {
+    console.log('Edit:', element);
     this.edit.emit(element);
   }
 
   onDelete(element: any): void {
     this.delete.emit(element);
+  }
+
+  onStatusChange(event: MatSlideToggleChange, element: any): void {
+    this.statusChange.emit(element);
   }
 }

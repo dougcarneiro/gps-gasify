@@ -19,6 +19,7 @@ import { SidenavModule } from './shared/components/sidenav/sidenav.module';
 import { HomeModule } from './home/home.module';
 import { ColaboradoresModule } from './colaboradores/colaboradores.module';
 import { GenericTableModule } from './shared/components/generic-table/generic-table.module';
+import { ProdutoModule } from './produtos/produto.module';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { GenericTableModule } from './shared/components/generic-table/generic-ta
     SidenavModule,
     ColaboradoresModule,
     GenericTableModule,
+    ProdutoModule,
   ],
   providers: [
     provideHttpClient(),

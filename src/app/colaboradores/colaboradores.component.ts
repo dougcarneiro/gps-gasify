@@ -31,7 +31,7 @@ export class ColaboradoresComponent implements OnInit {
     private colaboradorService: ColaboradorService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userId = getCurrentUserData().user.id;
@@ -83,8 +83,8 @@ export class ColaboradoresComponent implements OnInit {
         senha: formData.senha,
       }
 
-    toggleState(dialogRef);
-    this.colaboradorService.cadastrarColaborador(
+      toggleState(dialogRef);
+      this.colaboradorService.cadastrarColaborador(
         data.nome, data.email, data.funcao, data.senha!
       ).then(() => {
         this.snackService.sucesso('Colaborador adicionado com sucesso!');
@@ -124,18 +124,18 @@ export class ColaboradoresComponent implements OnInit {
   async remove(id: string): Promise<void> {
     this.isLoading = true;
     await this.colaboradorService.remover(id).then(() => {
-        this.getColaboradores();
-        this.snackService.sucesso('Colaborador removido com sucesso!');
-        this.isLoading = false;
-      }).catch((error) => {
-        console.error('Erro ao criar colaborador:', error);
-        this.snackService.erro('Erro ao tentar criar colaborador: ' + error.message);
-        this.isLoading = false;
-      });
+      this.getColaboradores();
+      this.snackService.sucesso('Colaborador removido com sucesso!');
+      this.isLoading = false;
+    }).catch((error) => {
+      console.error('Erro ao criar colaborador:', error);
+      this.snackService.erro('Erro ao tentar criar colaborador: ' + error.message);
+      this.isLoading = false;
+    });
   }
 
   async onEdit(colaborador: UserProfileListing): Promise<void> {
-     const dialogRef = this.dialog.open(ColaboradorFormComponent, {
+    const dialogRef = this.dialog.open(ColaboradorFormComponent, {
       width: '30rem',
       data: { formTitle: 'Atualizar Colaborador', colaborador: colaborador, isEditMode: true },
     });
@@ -149,20 +149,21 @@ export class ColaboradoresComponent implements OnInit {
         operationId: colaborador.operationId!,
       }
 
-    toggleState(dialogRef);
+      toggleState(dialogRef);
 
-    this.colaboradorService.atualizarColaborador(data)
-      .then((updatedColaborador) => {
-        this.snackService.sucesso('Colaborador atualizado com sucesso!');
-        dialogRef.close();
-      })
-      .catch((error) => {
-        console.error('Erro ao atualizar colaborador:', error);
-        this.snackService.erro('Erro ao atualizar colaborador: ' + error.message);
-        toggleState(dialogRef);
-      });
+      this.colaboradorService.atualizarColaborador(data)
+        .then((updatedColaborador) => {
+          this.snackService.sucesso('Colaborador atualizado com sucesso!');
+          dialogRef.close();
+        })
+        .catch((error) => {
+          console.error('Erro ao atualizar colaborador:', error);
+          this.snackService.erro('Erro ao atualizar colaborador: ' + error.message);
+          toggleState(dialogRef);
+        });
     });
   }
+
 
   logout(): void {
     removeUserData();

@@ -14,6 +14,7 @@ export class ColaboradorListagemComponent {
 
   @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<UserProfileListing>();
+  @Output() statusChange = new EventEmitter<UserProfileListing>();
 
   columnConfig: ColumnConfig[] = [
     { key: 'name', header: 'Nome', sortable: true, pipe: 'titlecase' },
@@ -21,7 +22,7 @@ export class ColaboradorListagemComponent {
     { key: 'function', header: 'Função', sortable: true, pipe: 'titlecase' },
   ];
 
-  constructor() {}
+  constructor() { }
 
   editarColaborador(colaborador: UserProfileListing): void {
     this.edit.emit(colaborador);
@@ -29,5 +30,9 @@ export class ColaboradorListagemComponent {
 
   removerColaborador(colaborador: UserProfileListing): void {
     this.delete.emit(colaborador.idUserProfileOperation);
+  }
+
+  onStatusChange(colaborador: UserProfileListing): void {
+    this.statusChange.emit(colaborador);
   }
 }
