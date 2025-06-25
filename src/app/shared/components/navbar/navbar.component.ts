@@ -14,6 +14,7 @@ import { AuthFirebaseService } from '../../services/auth-firebase/auth-firebase.
 export class NavbarComponent {
   menuItems = [
     { name: 'Home', icon: 'home', route: '' },
+    { name: 'Operação', icon: '', route: '/operacao' },
     { name: 'Colaboradores', icon: '', route: '/colaboradores' },
     { name: 'Produtos', icon: '', route: '/produtos' },
     { name: 'Meu Perfil', icon: '', route: '/meu-perfil' },

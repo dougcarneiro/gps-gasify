@@ -1,0 +1,40 @@
+<app-page-card class="!max-w-xl !mx-auto relative"
+[height]="'21rem'">
+  @if (isLoading) {
+    <div class="absolute inset-0 flex justify-center items-center min-h-[256px] z-20">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+  @else if (!isLoading && perfil) {
+      <div class="flex items-center gap-4 border-b pb-4 mb-4">
+        <div class="bg-blue-100 text-blue-700 rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold">
+          {{ perfil.nome.charAt(0) }}
+        </div>
+        <div>
+          <div class="text-xl font-semibold">{{ perfil.nome }}</div>
+          <div class="text-gray-500">{{ perfil.codigo }}</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Data de Cadastro</span>
+          <span class="font-medium">{{ perfil.dataCadastro | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Proprietário</span>
+          <span class="font-medium">{{ perfil.proprietario.nome | titlecase}} ({{ perfil.proprietario.email }})</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Quantidade de Colaboradores</span>
+          <span class="font-medium">{{ perfil.quantidadeColaboradores }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Quantidade de Produtos</span>
+          <span class="font-medium">{{ perfil.quantidadeProdutos }}</span>
+        </div>
+      </div>
+    }
+    @else {
+      <p>Opa</p>
+    }
+</app-page-card>

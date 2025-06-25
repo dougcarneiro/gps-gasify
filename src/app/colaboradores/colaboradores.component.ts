@@ -51,7 +51,7 @@ export class ColaboradoresComponent implements AfterViewInit {
 
     const currentUserData = getCurrentUserData();
     if (currentUserData && currentUserData.operationId) {
-      this.colaboradorService.carregarColaboradores(currentUserData.operationId).subscribe({
+      this.colaboradorService.carregarColaboradores().subscribe({
         next: dados => {
           this.colaboradores = dados
             .filter((dado: UserProfileListing) => dado.function !== undefined)

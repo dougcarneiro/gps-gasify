@@ -10,6 +10,7 @@ import { ColaboradoresComponent } from './colaboradores/colaboradores.component'
 import { ProdutoComponent } from './produtos/produto.component';
 import { WelcomeCardComponent } from './shared/components/welcome-card/welcome-card.component';
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
+import { OperacaoPerfilComponent } from './operacao-perfil/operacao-perfil.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
       {
         path: 'meu-perfil',
         component: MeuPerfilComponent,
+      },
+      {
+        path: 'operacao',
+        component: OperacaoPerfilComponent,
       }
     ]
   },

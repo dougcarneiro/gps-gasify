@@ -12,20 +12,20 @@ import { ColaboradorService } from '../../shared/services/colaborador/colaborado
   styleUrl: './cadastro.component.css'
 })
 export class CadastroComponent {
-    nomeFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
-    emailFormControl: FormControl = new FormControl('', [Validators.required, Validators.email]);
-    passwordFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
-    operationNameFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
-    operationSlugFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  nomeFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  emailFormControl: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  passwordFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  operationNameFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
+  operationSlugFormControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-    readonly registerForm = new FormGroup({
-      nome: this.nomeFormControl,
-      email: this.emailFormControl,
-      password: this.passwordFormControl
+  readonly registerForm = new FormGroup({
+    nome: this.nomeFormControl,
+    email: this.emailFormControl,
+    password: this.passwordFormControl
   });
 
   submitButtonStatus = false;
-  submitButtonText = 'Enviar';
+  submitButtonText = 'Cadastrar';
   isLoading = false;
 
   emailErrorMessage = signal('');
@@ -78,7 +78,8 @@ export class CadastroComponent {
       this.passwordErrorMessage.set('Digite sua senha.');
     }
     else if (this.passwordFormControl.hasError('minlength')) {
-      this.passwordErrorMessage.set('A senha deve ter no mínimo 6 caracteres.');}
+      this.passwordErrorMessage.set('A senha deve ter no mínimo 6 caracteres.');
+    }
     else {
       this.passwordErrorMessage.set('');
     }
@@ -132,8 +133,9 @@ export class CadastroComponent {
         this.passwordFormControl.value,
         this.operationNameFormControl.value,
         this.operationSlugFormControl.value
-      )
-      this.snackService.sucesso('Cadastro realizado com sucesso!');
+      ).then(() => {
+        this.snackService.sucesso('Cadastro realizado com sucesso!');
+      })
 
     } catch (error: any) {
       this.toggleLoading();

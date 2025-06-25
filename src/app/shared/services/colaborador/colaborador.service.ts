@@ -135,25 +135,7 @@ export class ColaboradorService {
         throw new Error('Erro ao registrar usuário');
       }
 
-      // 2. Cadastro da operação
-      const operationResult = await this.operationService.cadastrar({
-        name: operationNameFormControlValue,
-        slug: operationSlugFormControlValue,
-        ownerId: registerResult.user.id,
-      } as Operation).toPromise();
-
-      if (!operationResult) {
-        // This error message is based on the original component's logic,
-        // implying that if cadastrar returns falsy, it's likely due to an existing slug.
-        throw new Error('Já existe uma operação com esse código de acesso.');
-      }
-
-      // Verificar se os IDs existem antes de criar a relação (as in original component)
-      if (!operationResult.id) {
-        throw new Error('ID da operação não foi gerado corretamente');
-      }
-
-      // 3. Cadastro do perfil do usuário
+      // 2. Cadastro do perfil do usuário
       const userProfileResult = await this.userProfileService.cadastrar({
         name: nomeFormControlValue,
         email: emailFormControlValue,
@@ -166,6 +148,24 @@ export class ColaboradorService {
       // As per original component, check userProfileResult.id explicitly as well
       if (!userProfileResult.id) {
         throw new Error('ID do perfil do usuário não foi gerado corretamente');
+      }
+
+      // 3. Cadastro da operação
+      const operationResult = await this.operationService.cadastrar({
+        name: operationNameFormControlValue,
+        slug: operationSlugFormControlValue,
+        ownerId: userProfileResult.id,
+      } as Operation).toPromise();
+
+      if (!operationResult) {
+        // This error message is based on the original component's logic,
+        // implying that if cadastrar returns falsy, it's likely due to an existing slug.
+        throw new Error('Já existe uma operação com esse código de acesso.');
+      }
+
+      // Verificar se os IDs existem antes de criar a relação (as in original component)
+      if (!operationResult.id) {
+        throw new Error('ID da operação não foi gerado corretamente');
       }
 
       // 4. Criar relação usuário-operação
@@ -193,8 +193,9 @@ export class ColaboradorService {
     }
   }
 
-  carregarColaboradores(operationId: string): Observable<UserProfile[]> {
-    return this.userProfileOperationService.listarColaboradoresComDetalhes(operationId);
+  carregarColaboradores(): Observable<UserProfile[]> {
+    const currentUserData = getCurrentUserData();
+    return this.userProfileOperationService.listarColaboradoresComDetalhes(currentUserData.operationId);
   }
 
   async remover(id: string): Promise<Observable<void>> {

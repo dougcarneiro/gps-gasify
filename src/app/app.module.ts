@@ -24,6 +24,7 @@ import { NavbarModule } from './shared/components/navbar/navbar.module';
 import { PageCardModule } from './shared/components/page-card/page-card.module';
 import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card.module';
 import { MeuPerfilModule } from './meu-perfil/meu-perfil.module';
+import { OperacaoPerfilModule } from './operacao-perfil/operacao-perfil.module';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { MeuPerfilModule } from './meu-perfil/meu-perfil.module';
     PageCardModule,
     WelcomeCardModule,
     MeuPerfilModule,
+    OperacaoPerfilModule,
   ],
   providers: [
     provideHttpClient(),
