@@ -12,6 +12,8 @@ import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { UserProfileListing } from '../../types/UserProfileListing';
 import { checkAdmin } from '../../../colaboradores/utils/checkAdmin';
+import { MyProfile } from '../../types/MyProfile';
+import { firestoreTimestampToDate } from '../../../firestore/utils/firestore-date-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -210,5 +212,52 @@ export class ColaboradorService {
     } catch (error: any) {
       throw error;
     }
+  }
+
+  async getPerfil(): Promise<MyProfile> {
+    const userData = getCurrentUserData();
+    if (!userData) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    const userProfileOperation: UserProfileOperation | undefined = await this.userProfileOperationService.pesquisarPorId(userData.roleId).toPromise();
+    if (!userProfileOperation) {
+      throw new Error('Perfil de usuário não encontrado');
+    }
+
+    const userProfile: UserProfile | undefined = await this.userProfileService.pesquisarPorId(userProfileOperation.userProfileId!).toPromise();
+
+    if (!userProfile) {
+      throw new Error('Perfil de usuário não encontrado');
+    }
+
+    const operation: Operation | undefined = await this.operationService.pesquisarPorId(userProfileOperation.operationId!).toPromise();
+
+    if (!operation) {
+      throw new Error('Operação não encontrada');
+    }
+
+    return {
+      nome: userProfile.name!,
+      email: userProfile.email!,
+      role: userProfileOperation.function!,
+      dataCadastro: firestoreTimestampToDate(userProfile.createdAt! as { seconds: number, nanoseconds: number }),
+      dataCadastroOperacao: firestoreTimestampToDate(operation.createdAt! as { seconds: number, nanoseconds: number }),
+      nomeOperacao: operation.name!,
+      codigoOperacao: operation.slug!
+    };
+  }
+
+  carregarPerfil(): Observable<MyProfile> {
+    return new Observable<MyProfile>(observer => {
+      this.getPerfil()
+        .then(profile => {
+          observer.next(profile);
+          observer.complete();
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
   }
 }

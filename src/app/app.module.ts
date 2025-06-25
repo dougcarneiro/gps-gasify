@@ -23,6 +23,7 @@ import { ProdutoModule } from './produtos/produto.module';
 import { NavbarModule } from './shared/components/navbar/navbar.module';
 import { PageCardModule } from './shared/components/page-card/page-card.module';
 import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card.module';
+import { MeuPerfilModule } from './meu-perfil/meu-perfil.module';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card
     ProdutoModule,
     PageCardModule,
     WelcomeCardModule,
+    MeuPerfilModule,
   ],
   providers: [
     provideHttpClient(),

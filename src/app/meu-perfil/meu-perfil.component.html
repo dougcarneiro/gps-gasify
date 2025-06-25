@@ -1,0 +1,50 @@
+<app-page-card class="!max-w-xl !mx-auto relative"
+[height]="'21rem'">
+  @if (isLoading) {
+    <div class="absolute inset-0 flex justify-center items-center min-h-[256px] z-20">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+  @else if (!isLoading && perfil) {
+      <div class="absolute top-4 right-4 flex gap-2 z-10">
+        <button mat-icon-button type="button" class="!text-yellow-700 p-2 rounded-full" title="Alterar senha">
+          <mat-icon>key</mat-icon>
+        </button>
+      </div>
+      <div class="flex items-center gap-4 border-b pb-4 mb-4">
+        <div class="bg-blue-100 text-blue-700 rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold">
+          {{ perfil.nome.charAt(0) }}
+        </div>
+        <div>
+          <div class="text-xl font-semibold">{{ perfil.nome }}</div>
+          <div class="text-gray-500">{{ perfil.email }}</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Data de Cadastro</span>
+          <span class="font-medium">{{ perfil.dataCadastro | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Data de Cadastro na Operação</span>
+          <span class="font-medium">{{ perfil.dataCadastroOperacao | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Nome da Operação</span>
+          <span class="font-medium">{{ perfil.nomeOperacao }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Código da Operação</span>
+          <span class="font-medium">{{ perfil.codigoOperacao }}</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Cargo na Operação</span>
+          <span class="font-medium">{{ perfil.role | titlecase }}</span>
+        </div>
+      </div>
+    }
+    @else {
+      <p>Opa</p>
+    }
+</app-page-card>
+

@@ -3,6 +3,6 @@ export class Operation {
   name?: string;
   slug?: string;
   ownerId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: any;
+  updatedAt?: any;
 }

@@ -3,6 +3,6 @@ export class UserProfile {
   name?: string;
   email?: string;
   operationId?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: any;
+  updatedAt?: any;
 }
