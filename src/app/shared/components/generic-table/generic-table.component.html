@@ -14,6 +14,7 @@
                 <div class="flex justify-start">
                   <mat-slide-toggle
                     [name]="col.key"
+                    [disabled]="!isUserAdmin"
                     [checked]="element[col.key]"
                     (change)="onStatusChange($event, element)">
                   </mat-slide-toggle>
@@ -34,10 +35,10 @@
           <th mat-header-cell *matHeaderCellDef class="!bg-blue-100 !text-gray-600 !font-semibold !text-center"> Ações </th>
           <td mat-cell *matCellDef="let element" class="!py-3 !px-4">
             <div class="flex justify-center space-x-2">
-              <button mat-icon-button color="primary" (click)="onEdit(element)" matTooltip="Editar">
+              <button mat-icon-button color="primary" [disabled]="!isUserAdmin" [ngClass]="{'!text-blue-700 !font-bold': isUserAdmin}" (click)="onEdit(element)" matTooltip="Editar">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" class="!text-red-700 !font-bold" (click)="onDelete(element)" matTooltip="Excluir">
+              <button mat-icon-button color="warn" [disabled]="!isUserAdmin" [ngClass]="{'!text-red-700 !font-bold': isUserAdmin}" (click)="onDelete(element)" matTooltip="Excluir">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>

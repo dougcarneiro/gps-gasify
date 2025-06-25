@@ -11,6 +11,7 @@ export class ColaboradorListagemComponent {
   @Input() colaboradores: UserProfileListing[] = [];
   @Input() semColaboradoresLabel = 'Nenhum colaborador encontrado.';
   @Input() isLoading = false;
+  @Input() isUserAdmin = false;
 
   @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<UserProfileListing>();

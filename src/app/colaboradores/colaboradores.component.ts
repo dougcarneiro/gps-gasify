@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, AfterViewInit } from '@angular/core';
 import { getCurrentUserData, removeUserData } from '../utils/localStorage';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MensagemSnackService } from '../shared/services/message/snack.service';
@@ -15,7 +15,8 @@ import { DialogComponent } from '../shared/components/dialog/dialog.component';
   standalone: false,
   templateUrl: './colaboradores.component.html',
 })
-export class ColaboradoresComponent implements OnInit {
+export class ColaboradoresComponent implements AfterViewInit {
+  isUserAdmin: boolean = false;
 
   colaboradores: Array<UserProfileListing> = [];
   noColaboradorLabel = 'Nenhum colaborador cadastrado.'
@@ -33,9 +34,16 @@ export class ColaboradoresComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.userId = getCurrentUserData().user.id;
+    this.checkIfUserIsAdmin();
     this.getColaboradores();
+  }
+
+  checkIfUserIsAdmin(): void {
+    this.colaboradorService.verificarPermissao().then((userProfileOperation) => {
+      this.isUserAdmin = userProfileOperation ? true : false;
+    });
   }
 
   getColaboradores(): void {

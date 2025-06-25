@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { UserProfileListing } from '../../shared/types/UserProfileListing';
 import { ColumnConfig } from '../../shared/components/generic-table/generic-table.component';
 import { Produto } from '../../shared/model/Produto';
 
@@ -12,6 +11,7 @@ export class ProdutoListagemComponent {
   @Input() produtos: Produto[] = [];
   @Input() noDataMessage = 'Nenhum produto encontrado.';
   @Input() isLoading = false;
+  @Input() isUserAdmin = false;
 
   @Output() delete = new EventEmitter<string>();
   @Output() edit = new EventEmitter<Produto>();

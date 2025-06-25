@@ -10,5 +10,6 @@ export class PageCardComponent {
 
   @Input() height: string = '30rem';
   @Input() width: string = '60rem';
+  @Input() bgColor: string = '#f0f4ff';
 
 }

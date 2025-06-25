@@ -39,22 +39,3 @@ body::before {
     filter: blur(4px);
     z-index: -1;
 }
-
-
-
-
-/* .mdc-switch__track::after {
-  background: #c3f2b6 !important;
-}
-
-.mdc-text-field--filled:not(.mdc-text-field--disabled) {
-    background-color: #c3f2b6 !important;
-}
-
-.mat-mdc-unelevated-button:not(:disabled) {
-    background-color: blue !important;
-}
-
-.mat-mdc-progress-spinner {
-   --mdc-circular-progress-active-indicator-color: blue;
-} */

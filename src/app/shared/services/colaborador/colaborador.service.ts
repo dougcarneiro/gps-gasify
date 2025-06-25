@@ -10,8 +10,8 @@ import { Operation } from '../../model/Operation';
 import { UserProfileOperation } from '../../model/UserProfileOperation';
 import { Observable } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { Colaborador } from '../../model/Colaborador';
 import { UserProfileListing } from '../../types/UserProfileListing';
+import { checkAdmin } from '../../../colaboradores/utils/checkAdmin';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class ColaboradorService {
   ) { }
 
   async verificarSeTemPermissao(): Promise<UserProfileOperation> {
-    const operationRoleParent: UserProfileOperation | undefined = await this.userProfileOperationService.verificarUserAdmin(getCurrentUserData().roleId).toPromise();
+    const operationRoleParent: UserProfileOperation | undefined = await this.verificarPermissao();
 
     if (!operationRoleParent) {
       throw new Error('Você não tem permissão para realizar essa operação');
@@ -35,13 +35,17 @@ export class ColaboradorService {
     return operationRoleParent;
   }
 
+  async verificarPermissao(): Promise<UserProfileOperation | undefined> {
+    return await this.userProfileOperationService.verificarUserAdmin(getCurrentUserData().roleId).toPromise();
+  }
+
   async cadastrarColaborador(
     nome: string,
     email: string,
     funcao: string,
     password: string,
   ): Promise<void> {
-     const operationRoleParent: UserProfileOperation | undefined = await this.verificarSeTemPermissao();
+    const operationRoleParent: UserProfileOperation | undefined = await this.verificarSeTemPermissao();
     try {
 
       // 1. Checks if user is already on the platform
@@ -74,7 +78,7 @@ export class ColaboradorService {
         userProfileId: userProfileResult.id,
         operationId: operationRoleParent.operationId, // ID of the existing operation
         function: funcao, // Role of the "colaborador"
-        isAdmin: false, // Assuming "colaborador" is not an admin by default
+        isAdmin: checkAdmin(funcao), // Check if the role is admin
       } as UserProfileOperation).toPromise();
 
       // What happens after a "colaborador" is registered? Navigate somewhere?
@@ -87,29 +91,29 @@ export class ColaboradorService {
   }
 
 
-async atualizarColaborador(dados: UserProfileListing): Promise<void> {
-  await this.verificarSeTemPermissao();
-  try {
-    const userProfile = await this.userProfileService.pesquisarPorEmail(dados.email!).toPromise();
-    if (!userProfile || !userProfile.id) {
-      throw new Error('Perfil do colaborador não encontrado');
+  async atualizarColaborador(dados: UserProfileListing): Promise<void> {
+    await this.verificarSeTemPermissao();
+    try {
+      const userProfile = await this.userProfileService.pesquisarPorEmail(dados.email!).toPromise();
+      if (!userProfile || !userProfile.id) {
+        throw new Error('Perfil do colaborador não encontrado');
+      }
+
+      await this.userProfileService.atualizar({
+        id: userProfile.id,
+        name: dados.name,
+        email: dados.email,
+      } as UserProfile).toPromise();
+
+      await this.userProfileOperationService.atualizar({
+        id: dados.idUserProfileOperation,
+        function: dados.function,
+      } as UserProfileOperation).toPromise();
+
+    } catch (error: any) {
+      throw error;
     }
-
-    await this.userProfileService.atualizar({
-      id: userProfile.id,
-      name: dados.name,
-      email: dados.email,
-    } as UserProfile).toPromise();
-
-    await this.userProfileOperationService.atualizar({
-      id: dados.idUserProfileOperation,
-      function: dados.function,
-    } as UserProfileOperation).toPromise();
-
-  } catch (error: any) {
-    throw error;
   }
-}
   async cadastrarNovoUsuarioEOperacao(
     nomeFormControlValue: string,
     emailFormControlValue: string,
@@ -179,7 +183,7 @@ async atualizarColaborador(dados: UserProfileListing): Promise<void> {
         throw new Error('ID do relação usuário-operação não foi gerado corretamente');
       }
 
-      saveUserData({...registerResult, operationId: operationResult.id, roleId: userProfileOperationResult.id, role: 'proprietário'});
+      saveUserData({ ...registerResult, operationId: operationResult.id, roleId: userProfileOperationResult.id, role: 'proprietário' });
       this.router.navigate(['/']);
 
     } catch (error: any) {
@@ -197,10 +201,10 @@ async atualizarColaborador(dados: UserProfileListing): Promise<void> {
       return this.userProfileOperationService.remover(id).pipe(
         // Show success message on completion
         tap(() => {
-        // Handle errors and show error message
-        catchError((error: any) => {
-          throw error;
-        })
+          // Handle errors and show error message
+          catchError((error: any) => {
+            throw error;
+          })
         })
       );
     } catch (error: any) {

@@ -1,22 +1,21 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { getCurrentUserData, removeUserData } from '../utils/localStorage';
+import { ChangeDetectorRef, Component, AfterViewInit } from '@angular/core';
+import { getCurrentUserData } from '../utils/localStorage';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MensagemSnackService } from '../shared/services/message/snack.service';
-import { Router } from '@angular/router';
-import { Colaborador } from '../shared/model/Colaborador';
 import { toggleState } from '../utils/loading.util';
-import { UserProfileListing } from '../shared/types/UserProfileListing';
 import { DialogComponent } from '../shared/components/dialog/dialog.component';
 import { ProdutoService } from '../shared/services/produto/produto.service';
 import { Produto } from '../shared/model/Produto';
 import { ProdutoFormComponent } from './produto-form/produto-form.component';
+import { ColaboradorService } from '../shared/services/colaborador/colaborador.service';
 
 @Component({
   selector: 'app-produtos',
   standalone: false,
   templateUrl: './produto.component.html',
 })
-export class ProdutoComponent implements OnInit {
+export class ProdutoComponent implements AfterViewInit {
+  isUserAdmin: boolean = false;
 
   produtos: Array<Produto> = [];
   noDataLabel = 'Nenhum produto cadastrado.'
@@ -30,12 +29,20 @@ export class ProdutoComponent implements OnInit {
     private dialog: MatDialog,
     private snackService: MensagemSnackService,
     private produtoService: ProdutoService,
+    private colaboradorService: ColaboradorService,
     private cdr: ChangeDetectorRef,
   ) { }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.userId = getCurrentUserData().user.id;
     this.getProdutos();
+    this.checkIfUserIsAdmin();
+  }
+
+  checkIfUserIsAdmin(): void {
+    this.colaboradorService.verificarPermissao().then((userProfileOperation) => {
+      this.isUserAdmin = userProfileOperation ? true : false;
+    });
   }
 
   getProdutos(): void {

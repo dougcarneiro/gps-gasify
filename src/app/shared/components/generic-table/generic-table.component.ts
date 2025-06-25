@@ -31,6 +31,7 @@ export class GenericTableComponent {
 
   @Input() columnConfig: ColumnConfig[] = [];
   @Input() isLoading = false;
+  @Input() isUserAdmin = false;
   @Input() noDataMessage = 'Nenhum dado encontrado.';
 
   @Output() edit = new EventEmitter<any>();
