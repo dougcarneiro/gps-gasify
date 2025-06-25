@@ -112,18 +112,18 @@ export class ColaboradoresComponent implements AfterViewInit {
     this.dialogRef.close();
   }
 
-  async onDelete(id: string): Promise<void> {
+  async onDelete(colaborador: UserProfileListing): Promise<void> {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '30rem',
       data: {
         dialogTitle: 'Remover Colaborador',
-        dialogText: 'Deseja realmente remover este colaborador?'
+        dialogText: `Deseja realmente remover o colaborador ${colaborador.name}?`
       },
     });
 
     dialogRef.componentInstance.dialogActionConfirm.subscribe(
       async () => {
-        await this.remove(id);
+        await this.remove(colaborador.idUserProfileOperation!);
         dialogRef.close();
       }
     );

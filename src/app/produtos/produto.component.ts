@@ -118,18 +118,18 @@ export class ProdutoComponent implements AfterViewInit {
     this.dialogRef.close();
   }
 
-  async onDelete(id: string): Promise<void> {
+  async onDelete(produto: Produto): Promise<void> {
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '30rem',
       data: {
         dialogTitle: 'Remover Produto',
-        dialogText: 'Deseja realmente remover este Produto?'
+        dialogText: `Deseja realmente remover o produto ${produto.descricao}?`
       },
     });
 
     dialogRef.componentInstance.dialogActionConfirm.subscribe(
       async () => {
-        await this.remove(id);
+        await this.remove(produto.id!);
         dialogRef.close();
       }
     );

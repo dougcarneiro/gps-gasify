@@ -13,7 +13,7 @@ export class ProdutoListagemComponent {
   @Input() isLoading = false;
   @Input() isUserAdmin = false;
 
-  @Output() delete = new EventEmitter<string>();
+  @Output() delete = new EventEmitter<Produto>();
   @Output() edit = new EventEmitter<Produto>();
   @Output() statusChange = new EventEmitter<Produto>();
 
@@ -33,7 +33,7 @@ export class ProdutoListagemComponent {
   }
 
   removerProduto(produto: Produto): void {
-    this.delete.emit(produto.id);
+    this.delete.emit(produto);
   }
 
   onStatusChange(produto: Produto): void {

@@ -13,7 +13,7 @@ export class ColaboradorListagemComponent {
   @Input() isLoading = false;
   @Input() isUserAdmin = false;
 
-  @Output() delete = new EventEmitter<string>();
+  @Output() delete = new EventEmitter<UserProfileListing>();
   @Output() edit = new EventEmitter<UserProfileListing>();
   @Output() statusChange = new EventEmitter<UserProfileListing>();
 
@@ -30,7 +30,7 @@ export class ColaboradorListagemComponent {
   }
 
   removerColaborador(colaborador: UserProfileListing): void {
-    this.delete.emit(colaborador.idUserProfileOperation);
+    this.delete.emit(colaborador);
   }
 
   onStatusChange(colaborador: UserProfileListing): void {
