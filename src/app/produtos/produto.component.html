@@ -17,6 +17,7 @@
           (reload)="getProdutos()"
           (delete)="onDelete($event)"
           (edit)="onEdit($event)"
+          (statusChange)="onStatusChange($event)"
           [noDataMessage]="noDataLabel">
         </app-produto-listagem>
       </div>
