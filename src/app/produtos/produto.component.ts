@@ -154,7 +154,7 @@ export class ProdutoComponent implements AfterViewInit {
       width: '30rem',
       data: {
         dialogTitle: produto.status ? 'Ativar Produto' : 'Desativar Produto',
-        dialogText: `Deseja realmente ${produto.status ? 'ativar' : 'desativar'} este produto?`
+        dialogText: `Deseja realmente ${produto.status ? 'ativar' : 'desativar'} o produto ${produto.descricao}?`
       },
     });
 
