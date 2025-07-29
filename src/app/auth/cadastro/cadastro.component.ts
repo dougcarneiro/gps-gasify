@@ -118,7 +118,7 @@ export class CadastroComponent {
     }
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.nomeFormControl.markAllAsTouched();
     if (this.registerForm.invalid) {
       return;
@@ -126,20 +126,17 @@ export class CadastroComponent {
 
     this.toggleLoading();
 
-    try {
-      this.colaboradorService.cadastrarNovoUsuarioEOperacao(
-        this.nomeFormControl.value,
-        this.emailFormControl.value,
-        this.passwordFormControl.value,
-        this.operationNameFormControl.value,
-        this.operationSlugFormControl.value
-      ).then(() => {
-        this.snackService.sucesso('Cadastro realizado com sucesso!');
-      })
-
-    } catch (error: any) {
+    this.colaboradorService.cadastrarNovoUsuarioEOperacao(
+      this.nomeFormControl.value,
+      this.emailFormControl.value,
+      this.passwordFormControl.value,
+      this.operationNameFormControl.value,
+      this.operationSlugFormControl.value
+    ).then(() => {
+      this.snackService.sucesso('Cadastro realizado com sucesso!');
+    }).catch((error) => {
+      this.snackService.erro(error.message);
       this.toggleLoading();
-      this.snackService.erro(error.message || 'Erro durante o cadastro');
-    }
+    });
   }
 }
