@@ -20,6 +20,28 @@ export class CaixaService {
     return this.caixaFirebaseService.listarAtivoPorOperacao(operationId);
   }
 
+  async listarCaixasPorOwner(ownerId: string): Promise<Caixa[]> {
+    try {
+      return (await this.caixaFirebaseService.listarPorOwner(ownerId).toPromise()) ?? [];
+    } catch (error) {
+      console.error('Erro ao listar caixas por owner:', error);
+      throw new Error('Erro ao listar caixas por owner');
+    }
+  }
+
+  async verificarSeCaixaEstaAberto(ownerId: string, operationId: string): Promise<Caixa | null> {
+    try {
+      const caixas: Caixa[] | undefined = await this.caixaFirebaseService.listarAtivoPorOwnerEOperation(ownerId, operationId).toPromise();
+      if (!caixas) {
+        return null;
+      }
+      return caixas.length > 0 ? caixas[0] : null;
+    } catch (error) {
+      console.error('Erro ao verificar se caixa está aberto:', error);
+      throw new Error('Erro ao verificar se caixa está aberto');
+    }
+  }
+
   async listarCaixas(operationId: string): Promise<Caixa[]> {
     try {
       return (await this.caixaFirebaseService.listarPorOperacao(operationId).toPromise()) ?? [];

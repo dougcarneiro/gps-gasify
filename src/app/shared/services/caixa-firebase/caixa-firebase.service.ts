@@ -112,6 +112,26 @@ export class CaixaFirebaseService {
     });
   }
 
+  listarAtivoPorOwnerEOperation(ownerId: string, operationId: string): Observable<Caixa[]> {
+    return runInInjectionContext(this.injetor, () => {
+      return from(
+        this.collectionCaixa.ref
+          .where('ownerId', '==', ownerId)
+          .where('operationId', '==', operationId)
+          .where('isActive', '==', true)
+          .get()
+      ).pipe(
+        map(snapshot => {
+          if (!snapshot.empty) {
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Caixa));
+          } else {
+            return [];
+          }
+        })
+      );
+    });
+  }
+
   atualizar(caixa: Caixa): Observable<void> {
     caixa.updatedAt = new Date();
     return runInInjectionContext(this.injetor, () => {
