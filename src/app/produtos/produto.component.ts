@@ -75,7 +75,7 @@ export class ProdutoComponent implements AfterViewInit {
     }
   }
 
-  novoColaboradorDialog(): void {
+  novoProdutoDialog(): void {
     const dialogRef = this.dialog.open(ProdutoFormComponent, {
       width: '30rem',
       data: { formTitle: 'Novo Produto' },
