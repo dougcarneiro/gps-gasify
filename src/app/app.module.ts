@@ -25,6 +25,7 @@ import { PageCardModule } from './shared/components/page-card/page-card.module';
 import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card.module';
 import { MeuPerfilModule } from './meu-perfil/meu-perfil.module';
 import { OperacaoPerfilModule } from './operacao-perfil/operacao-perfil.module';
+import { CaixaModule } from './caixas/caixa.module';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { OperacaoPerfilModule } from './operacao-perfil/operacao-perfil.module';
     WelcomeCardModule,
     MeuPerfilModule,
     OperacaoPerfilModule,
+    CaixaModule,
   ],
   providers: [
     provideHttpClient(),

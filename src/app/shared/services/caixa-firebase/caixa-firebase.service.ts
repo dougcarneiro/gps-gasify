@@ -61,6 +61,18 @@ export class CaixaFirebaseService {
     });
   }
 
+  private convertFirestoreDate(timestamp: any): Date | undefined {
+    if (!timestamp) return undefined;
+    if (timestamp instanceof Date) return timestamp;
+    if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+      return timestamp.toDate();
+    }
+    if (timestamp.seconds) {
+      return new Date(timestamp.seconds * 1000);
+    }
+    return new Date(timestamp);
+  }
+
   listarPorOperacao(operationId: string): Observable<Caixa[]> {
     return runInInjectionContext(this.injetor, () => {
       return from(
@@ -68,7 +80,16 @@ export class CaixaFirebaseService {
       ).pipe(
         map(snapshot => {
           if (!snapshot.empty) {
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Caixa));
+            return snapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                ...data,
+                createdAt: this.convertFirestoreDate(data.createdAt),
+                updatedAt: this.convertFirestoreDate(data.updatedAt),
+                deletedAt: this.convertFirestoreDate(data.deletedAt)
+              } as Caixa;
+            });
           } else {
             return [];
           }
@@ -87,7 +108,16 @@ export class CaixaFirebaseService {
       ).pipe(
         map(snapshot => {
           if (!snapshot.empty) {
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Caixa));
+            return snapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                ...data,
+                createdAt: this.convertFirestoreDate(data.createdAt),
+                updatedAt: this.convertFirestoreDate(data.updatedAt),
+                deletedAt: this.convertFirestoreDate(data.deletedAt)
+              } as Caixa;
+            });
           } else {
             return [];
           }

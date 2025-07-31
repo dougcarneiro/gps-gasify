@@ -3,7 +3,7 @@ export class Caixa {
   operationId!: string; // Operation ID to which this product belongs
   initialBalance!: number;
   currentBalance!: number;
-  closedBalance!: number;
+  closedBalance!: number | null;
   isActive!: boolean;
   createdAt?: Date;
   updatedAt?: Date;

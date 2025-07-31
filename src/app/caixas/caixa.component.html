@@ -1,0 +1,74 @@
+<div class="flex justify-center my-5">
+  <app-page-card class="!max-w-xl !mx-auto relative" [height]="'21rem'">
+    @if (isLoading || isLoadingProfile) {
+      <div class="absolute inset-0 flex justify-center items-center min-h-[256px] z-20">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    }
+    @else if (!caixaAtivo && !isLoading) {
+      <div class="flex flex-col items-center justify-center h-96 space-y-4">
+        <div class="text-gray-500 text-lg">{{ noDataLabel }}</div>
+        <button mat-fab
+          (click)="abrirCaixaDialog()"
+          class="!bg-blue-500 hover:bg-blue-700 !text-white !font-bold !px-4 !rounded-full"
+          title="Abrir Caixa"
+        >
+          <mat-icon>account_balance_wallet</mat-icon>
+        </button>
+        <span class="text-sm text-gray-400">Clique para abrir um novo caixa.</span>
+      </div>
+    }
+    @else if (caixaAtivo && !isLoadingProfile && !isLoading) {
+      <div class="absolute top-4 right-4 flex gap-2 z-10">
+        <button mat-raised-button
+          (click)="fecharCaixaDialog()"
+          class="!bg-red-500 hover:!bg-red-600 !text-white !font-medium !px-4 !py-2 !rounded-md !shadow-md"
+          title="Fechar Caixa"
+        >
+          <mat-icon class="!mr-2">lock</mat-icon>
+          Fechar Caixa
+        </button>
+      </div>
+
+      <div class="flex items-center gap-4 border-b pb-4 mb-4">
+        <div class="bg-green-100 text-green-700 rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold border-2 border-green-300">
+          <mat-icon class="!text-3xl">account_balance_wallet</mat-icon>
+        </div>
+        <div>
+          <div class="text-xl font-semibold">Caixa Ativo</div>
+          <div class="text-gray-500">Status: Aberto</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Saldo Atual</span>
+          <span class="font-medium text-lg text-green-600">
+            {{ caixaAtivo.currentBalance | currency:'BRL':'symbol':'1.2-2' }}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Saldo Inicial</span>
+          <span class="font-medium">
+            {{ caixaAtivo.initialBalance | currency:'BRL':'symbol':'1.2-2' }}
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Data de Abertura</span>
+          <span class="font-medium">
+            @if (caixaAtivo.createdAt) {
+              {{ (caixaAtivo.createdAt | date: 'dd/MM/yyyy HH:mm') || 'Data não disponível' }}
+            }
+            @else {
+              Data não disponível
+            }
+          </span>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-gray-500 text-sm">Responsável</span>
+          <span class="font-medium">{{ colaboradorPerfil!.nome || 'N/A' }}</span>
+        </div>
+      </div>
+    }
+  </app-page-card>
+</div>

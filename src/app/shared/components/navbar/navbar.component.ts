@@ -17,6 +17,7 @@ export class NavbarComponent {
     { name: 'Operação', icon: '', route: '/operacao' },
     { name: 'Colaboradores', icon: '', route: '/colaboradores' },
     { name: 'Produtos', icon: '', route: '/produtos' },
+    { name: 'Caixa', icon: '', route: '/caixa' },
     { name: 'Meu Perfil', icon: '', route: '/meu-perfil' },
   ];
 
