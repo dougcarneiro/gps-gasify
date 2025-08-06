@@ -1,0 +1,47 @@
+<div [hidden]="hidden">
+  <h2 class="p-8 mt-2 flex justify-center font-satisfy text-blue-800 text-5xl">Lançar Venda</h2>
+  <mat-dialog-content [formGroup]="form">
+    <mat-form-field class="w-full">
+      <mat-label>Cliente (Opcional)</mat-label>
+      <input matInput formControlName="cliente" placeholder="Nome ou CPF">
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Método de Pagamento</mat-label>
+      <mat-select formControlName="metodoPagamento">
+        <mat-option *ngFor="let metodo of metodosPagamento" [value]="metodo.value">
+          {{ metodo.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <h3 class="text-lg font-semibold mt-4">Itens da Venda</h3>
+    <div formArrayName="itens">
+      <div *ngFor="let item of itens.controls; let i = index" [formGroupName]="i" class="flex items-center justify-between p-2 border-b">
+        <span>{{ item.value.descricaoProduto }} - {{ item.value.quantidade }} x {{ item.value.precoUnitario | currency:'BRL' }}</span>
+        <span>{{ item.value.subtotal | currency:'BRL' }}</span>
+        <button mat-icon-button color="warn" (click)="removerItem(i)">
+          <mat-icon [ngClass]="'!text-red-700'">remove_circle</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary" (click)="adicionarItem()" class="mt-4 w-full">
+      <mat-icon>add</mat-icon> Adicionar Item
+    </button>
+
+    <div class="text-right mt-4 font-bold text-xl">
+      Total: {{ calcularTotal() | currency:'BRL' }}
+    </div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button [disabled]="isLoading" mat-dialog-close>Cancelar</button>
+    <button mat-flat-button
+    class="w-full md:w-auto md:px-12 !rounded-md !text-md"
+    color="primary" [disabled]="form.invalid || isLoading" (click)="onSubmit()">
+      <span *ngIf="!isLoading">Salvar Venda</span>
+      <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+    </button>
+  </mat-dialog-actions>
+</div>

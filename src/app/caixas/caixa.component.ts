@@ -69,7 +69,6 @@ export class CaixaComponent implements AfterViewInit {
               return dateB.getTime() - dateA.getTime();
             });
             this.caixaAtivo = dados[0];
-            console.log('Caixa ativo carregado:', this.caixaAtivo);
           }
           this.isLoading = false;
         },

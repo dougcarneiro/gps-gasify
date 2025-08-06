@@ -1,0 +1,28 @@
+<app-page-card>
+  <div *ngIf="isLoading" class="flex justify-center items-center h-96">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && !caixaAberto" class="text-center p-10">
+    <h2 class="text-2xl font-semibold mb-4">Nenhum caixa aberto</h2>
+    <p class="mb-6">Você precisa abrir um caixa para registrar vendas.</p>
+    <button mat-raised-button color="primary" (click)="irParaCaixa()">Abrir Caixa</button>
+  </div>
+
+  <div *ngIf="!isLoading && caixaAberto">
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold">Vendas do Caixa</h1>
+      <button mat-fab color="primary" (click)="lancarVenda()">
+        <mat-icon>add_shopping_cart</mat-icon>
+      </button>
+    </div>
+
+    <app-generic-table
+      [data]="vendas"
+      [columnConfig]="columnConfig"
+      [showDetailsButton]="true"
+      [noDataMessage]="noDataLabel"
+      (details)="verDetalhes($event)">
+    </app-generic-table>
+  </div>
+</app-page-card>

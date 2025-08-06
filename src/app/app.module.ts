@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
@@ -26,7 +26,12 @@ import { WelcomeCardModule } from './shared/components/welcome-card/welcome-card
 import { MeuPerfilModule } from './meu-perfil/meu-perfil.module';
 import { OperacaoPerfilModule } from './operacao-perfil/operacao-perfil.module';
 import { CaixaModule } from './caixas/caixa.module';
+import { VendasModule } from './vendas/vendas.module';
+import { PipesModule } from './shared/pipes/pipes.module';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [AppComponent],
@@ -53,12 +58,15 @@ import { CaixaModule } from './caixas/caixa.module';
     MeuPerfilModule,
     OperacaoPerfilModule,
     CaixaModule,
+    VendasModule,
+    PipesModule,
   ],
   providers: [
     provideHttpClient(),
     provideAnimationsAsync(),
     provideNativeDateAdapter(),
     MensagemSnackService,
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     {
       provide: IAuthService,
       useClass: AuthFirebaseService

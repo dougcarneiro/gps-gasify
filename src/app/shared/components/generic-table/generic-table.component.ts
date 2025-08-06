@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -17,7 +17,7 @@ export interface ColumnConfig {
   templateUrl: './generic-table.component.html',
   standalone: false,
 })
-export class GenericTableComponent {
+export class GenericTableComponent implements OnInit {
   private _data: any[] = [];
 
   @Input()
@@ -30,6 +30,7 @@ export class GenericTableComponent {
   }
 
   @Input() columnConfig: ColumnConfig[] = [];
+  @Input() showDetailsButton = false;
   @Input() isLoading = false;
   @Input() isUserAdmin = false;
   @Input() noDataMessage = 'Nenhum dado encontrado.';
@@ -37,6 +38,7 @@ export class GenericTableComponent {
   @Output() edit = new EventEmitter<any>();
   @Output() delete = new EventEmitter<any>();
   @Output() statusChange = new EventEmitter<any>();
+  @Output() details = new EventEmitter<unknown>();
 
   dataSource = new MatTableDataSource<any>([]);
 
@@ -47,6 +49,10 @@ export class GenericTableComponent {
 
   get displayedColumns(): string[] {
     return [...this.columnConfig.map(c => c.key), 'actions'];
+  }
+
+  ngOnInit() {
+    this.columnConfig
   }
 
   onEdit(element: any): void {
@@ -60,4 +66,9 @@ export class GenericTableComponent {
   onStatusChange(event: MatSlideToggleChange, element: any): void {
     this.statusChange.emit(element);
   }
+
+  onDetails(element: unknown): void {
+    this.details.emit(element);
+  }
 }
+

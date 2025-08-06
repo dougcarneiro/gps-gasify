@@ -29,6 +29,10 @@ export class CaixaService {
     }
   }
 
+  pesquisarPorId(caixaId: string): Observable<Caixa> {
+    return this.caixaFirebaseService.pesquisarPorId(caixaId);
+  }
+
   async verificarSeCaixaEstaAberto(ownerId: string, operationId: string): Promise<Caixa | null> {
     try {
       const caixas: Caixa[] | undefined = await this.caixaFirebaseService.listarAtivoPorOwnerEOperation(ownerId, operationId).toPromise();

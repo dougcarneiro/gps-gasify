@@ -23,6 +23,12 @@
                 {{ element[col.key] | titlecase }}
               } @else if (col.pipe === 'lowercase') {
                 {{ element[col.key] | lowercase }}
+              } @else if (col.pipe === 'localDate') {
+                {{ element[col.key] | localDate }}
+              } @else if (col.pipe === 'brlCurrency') {
+                {{ element[col.key] | brlCurrency }}
+              } @else if (col.pipe === 'paymentMethod') {
+                {{ element[col.key] | paymentMethod }}
               } @else {
                 {{ element[col.key] }}
               }
@@ -35,6 +41,14 @@
           <th mat-header-cell *matHeaderCellDef class="!bg-blue-100 !text-gray-600 !font-semibold !text-center"> Ações </th>
           <td mat-cell *matCellDef="let element" class="!py-3 !px-4">
             <div class="flex justify-center space-x-2">
+              @if (showDetailsButton) {
+                <button mat-icon-button color="primary"
+                        matTooltip="Detalhes"
+                        [ngClass]="'!text-blue-400 !font-bold'"
+                        (click)="onDetails(element)">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+              }
               <button mat-icon-button color="primary" [disabled]="!isUserAdmin" [ngClass]="{'!text-blue-700 !font-bold': isUserAdmin}" (click)="onEdit(element)" matTooltip="Editar">
                 <mat-icon>edit</mat-icon>
               </button>

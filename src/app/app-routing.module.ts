@@ -12,6 +12,7 @@ import { WelcomeCardComponent } from './shared/components/welcome-card/welcome-c
 import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { OperacaoPerfilComponent } from './operacao-perfil/operacao-perfil.component';
 import { CaixaComponent } from './caixas/caixa.component';
+import { VendasComponent } from './vendas/vendas.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,10 @@ const routes: Routes = [
         path: 'caixa',
         component: CaixaComponent,
       },
+      {
+        path: 'vendas',
+        component: VendasComponent,
+      }
     ]
   },
   { path: '**', redirectTo: '' } // Rota curinga
