@@ -1,17 +1,19 @@
-<h2 mat-dialog-title>Detalhes da Venda</h2>
+<h2 class="p-8 mt-2 flex justify-center font-satisfy text-blue-800 text-5xl">Detalhes da Venda</h2>
 <div *ngIf="isLoading" class="flex justify-center items-center">
   <mat-spinner diameter="36"></mat-spinner>
 </div>
 <mat-dialog-content *ngIf="!isLoading && venda">
-  <p><strong>ID da Venda:</strong> {{ venda.id }}</p>
-  <p><strong>Data:</strong> {{ venda.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
-  <p><strong>Cliente:</strong> {{ venda.cliente || 'Não identificado' }}</p>
-  <p><strong>Método de Pagamento:</strong> {{ venda.metodoPagamento | paymentMethod}}</p>
+  <div class="text-base">
+    <p><strong>ID da Venda:</strong> {{ venda.id }}</p>
+    <p><strong>Data:</strong> {{ venda.createdAt | date:'dd/MM/yyyy HH:mm' }}</p>
+    <p><strong>Cliente:</strong> {{ venda.cliente || 'Não identificado' }}</p>
+    <p><strong>Método de Pagamento:</strong> {{ venda.metodoPagamento | paymentMethod}}</p>
+  </div>
 
   <h3 class="text-lg font-semibold mt-4">Itens</h3>
-  <div *ngFor="let item of venda.itens" class="flex justify-between p-2 border-b">
-    <span>{{ item.descricaoProduto }} ({{ item.quantidade }} x {{ item.precoUnitario | currency:'BRL' }})</span>
-    <span>{{ item.subtotal | currency: 'BRL' }}</span>
+  <div *ngFor="let item of venda.itens" class="flex justify-between p-2 border-b text-base">
+      <span>{{ item.descricaoProduto }} ({{ item.quantidade }} x {{ item.precoUnitario | currency:'BRL' }})</span>
+      <span>{{ item.subtotal | currency: 'BRL' }}</span>
   </div>
 
   <div class="text-right mt-4 font-bold text-xl">

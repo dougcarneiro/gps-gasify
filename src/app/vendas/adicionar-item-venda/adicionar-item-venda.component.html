@@ -1,4 +1,4 @@
-<h2 class="p-8 mt-2 flex justify-center font-satisfy text-blue-800 text-5xl">Adicionar Produto</h2>
+<h2 class="p-8 mt-2 flex justify-center font-satisfy text-blue-800 text-5xl">Adicionar Item</h2>
 <div *ngIf="isLoading" class="flex justify-center items-center h-24">
   <mat-spinner diameter="36"></mat-spinner>
 </div>
@@ -21,6 +21,6 @@
   <button mat-button mat-dialog-close>Cancelar</button>
   <button mat-flat-button
     class="w-full md:w-auto md:px-12 !rounded-md !text-md"
-    color="primary" [disabled]="form.invalid" (click)="onSubmit()">Adicionar</button>
+    color="primary" [disabled]="form.invalid" (click)="onSubmit()">Confirmar</button>
 </mat-dialog-actions>
 
