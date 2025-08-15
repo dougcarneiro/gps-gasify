@@ -17,6 +17,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTableModule,
     MatSortModule,
     MatMenuModule,
+    MatButtonToggleModule,
   ],
   exports: [
     MatFormFieldModule,
@@ -65,6 +67,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTableModule,
     MatSortModule,
     MatMenuModule,
+    MatButtonToggleModule,
   ]
 })
 export class MaterialModule { }

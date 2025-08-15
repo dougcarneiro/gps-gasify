@@ -1,5 +1,18 @@
 <app-page-card class="!max-w-xl !mx-auto relative"
 [height]="'21rem'">
+  <!-- Botão Dashboard - Canto Superior Direito -->
+  <button
+    *ngIf="isAdminOrOwner && !isLoading"
+    mat-raised-button
+    color="primary"
+    class="dashboard-button"
+    (click)="navegarParaDashboard()"
+    matTooltip="Acessar Dashboard de Vendas"
+    matTooltipPosition="left">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard
+  </button>
+
   @if (isLoading) {
     <div class="absolute inset-0 flex justify-center items-center min-h-[256px] z-20">
       <mat-spinner diameter="50"></mat-spinner>

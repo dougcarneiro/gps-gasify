@@ -67,4 +67,8 @@ export class VendaService {
   getVendaPorId(id: string): Observable<Venda> {
     return this.vendaFirebaseService.pesquisarPorId(id);
   }
+
+  listarVendasPorOperacao(operationId: string, from?: Date, to?: Date): Observable<Venda[]> {
+    return this.vendaFirebaseService.listarPorOperacao(operationId, from, to);
+  }
 }

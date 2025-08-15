@@ -4,6 +4,7 @@ import { LoginComponent } from './auth/login/login.component';
 import { CadastroComponent } from './auth/cadastro/cadastro.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { NoAuthGuard } from './shared/guards/no-auth.guard';
+import { DashboardGuard } from './shared/guards/dashboard.guard';
 import { HomeComponent } from './home/home.component';
 import { ColaboradorListagemComponent } from './colaboradores/colaborador-listagem/colaborador-listagem.component';
 import { ColaboradoresComponent } from './colaboradores/colaboradores.component';
@@ -13,6 +14,7 @@ import { MeuPerfilComponent } from './meu-perfil/meu-perfil.component';
 import { OperacaoPerfilComponent } from './operacao-perfil/operacao-perfil.component';
 import { CaixaComponent } from './caixas/caixa.component';
 import { VendasComponent } from './vendas/vendas.component';
+import { DashboardVendasComponent } from './dashboard/vendas/dashboard-vendas.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,11 @@ const routes: Routes = [
       {
         path: 'operacao',
         component: OperacaoPerfilComponent,
+      },
+      {
+        path: 'operacao/dashboard',
+        component: DashboardVendasComponent,
+        canActivate: [DashboardGuard],
       },
       {
         path: 'caixa',

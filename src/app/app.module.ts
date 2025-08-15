@@ -30,6 +30,8 @@ import { VendasModule } from './vendas/vendas.module';
 import { PipesModule } from './shared/pipes/pipes.module';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { GenericChartModule } from './shared/components/generic-chart/generic-chart.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 registerLocaleData(localePt);
 
@@ -60,6 +62,8 @@ registerLocaleData(localePt);
     CaixaModule,
     VendasModule,
     PipesModule,
+    GenericChartModule,
+    DashboardModule,
   ],
   providers: [
     provideHttpClient(),
