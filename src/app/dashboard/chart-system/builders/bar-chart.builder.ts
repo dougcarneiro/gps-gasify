@@ -1,11 +1,11 @@
 import { ChartBuilder } from './chart-builder.interface';
 import { ChartOptions } from '../../../shared/components/generic-chart/generic-chart.component';
 import {
-    getChartType,
-    barPlotOptionsStyling,
-    defaultGridStyling,
-    defaultStrokeStyling,
-    barFillStyling
+  getChartType,
+  barPlotOptionsStyling,
+  defaultGridStyling,
+  defaultStrokeStyling,
+  barFillStyling
 } from '../../chart-styling';
 import { formatMoney } from '../../../utils/money.util';
 
@@ -15,33 +15,33 @@ import { formatMoney } from '../../../utils/money.util';
  */
 export class BarChartBuilder implements ChartBuilder {
 
-    getChartType(): string {
-        return 'bar';
-    }
+  getChartType(): string {
+    return 'bar';
+  }
 
-    buildChartOptions(yAxisTitle: string, isMoneyChart: boolean = false): Partial<ChartOptions> {
-        const moneyChartYAxisLabels = {
-            formatter: (value: number) => formatMoney(value),
-        };
+  buildChartOptions(yAxisTitle: string, isMoneyChart: boolean = false): Partial<ChartOptions> {
+    const moneyChartYAxisLabels = {
+      formatter: (value: number) => formatMoney(value),
+    };
 
-        return {
-            series: [],
-            chart: getChartType('bar'),
-            plotOptions: barPlotOptionsStyling,
-            xaxis: {
-                type: 'datetime',
-                labels: {
-                    format: 'dd/MM',
-                    showDuplicates: false,
-                },
-            },
-            yaxis: {
-                title: { text: yAxisTitle },
-                labels: isMoneyChart ? moneyChartYAxisLabels : {}
-            },
-            stroke: defaultStrokeStyling,
-            grid: defaultGridStyling,
-            fill: barFillStyling,
-        };
-    }
+    return {
+      series: [],
+      chart: getChartType('bar'),
+      plotOptions: barPlotOptionsStyling,
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          format: 'dd/MM',
+          showDuplicates: false,
+        },
+      },
+      yaxis: {
+        title: { text: yAxisTitle },
+        labels: isMoneyChart ? moneyChartYAxisLabels : {}
+      },
+      stroke: defaultStrokeStyling,
+      grid: defaultGridStyling,
+      fill: barFillStyling,
+    };
+  }
 }

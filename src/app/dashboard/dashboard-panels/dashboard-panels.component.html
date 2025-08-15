@@ -1,0 +1,53 @@
+<app-page-card>
+  <div class="flex justify-between items-start mb-6">
+     <div class="container mx-auto p-6">
+        <div class="flex justify-between items-start mb-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Dashboards</h1>
+            <p class="text-gray-600">Visualize e analise dados de sua operação</p>
+          </div>
+        <button
+            mat-stroked-button
+            color="primary"
+            (click)="voltar()"
+            class="flex items-center">
+            <mat-icon class="!mr-2">arrow_back</mat-icon>
+            Voltar
+          </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex flex-col md:flex-row gap-6 p-6 max-w-4xl mx-auto">
+    <!-- Painel Vendas -->
+    <div class="flex-1 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer border border-gray-200 flex flex-col"
+        (click)="navigateToVendas()">
+      <div class="p-8 text-center flex flex-col flex-1">
+        <div class="mb-4">
+          <mat-icon class="text-blue-600 dashboard-icon">trending_up</mat-icon>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Vendas</h2>
+        <p class="text-gray-600 mb-4 flex-1">Visualize dados detalhados sobre suas vendas, incluindo quantidade de vendas por período e vendas por categoria de produtos.</p>
+        <div class="flex items-center justify-center text-blue-600 font-semibold mt-auto">
+          <span>Ver Dashboard</span>
+          <mat-icon class="ml-2">arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <!-- Painel Receitas -->
+    <div class="flex-1 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer border border-gray-200 flex flex-col"
+        (click)="navigateToReceitas()">
+      <div class="p-8 text-center flex flex-col flex-1">
+        <div class="mb-4">
+          <mat-icon class="text-green-600 dashboard-icon">attach_money</mat-icon>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">Receitas</h2>
+        <p class="text-gray-600 mb-4 flex-1">Acompanhe a receita total e receita por categoria de produtos para análise financeira detalhada do seu negócio.</p>
+        <div class="flex items-center justify-center text-green-600 font-semibold mt-auto">
+          <span>Ver Dashboard</span>
+          <mat-icon class="ml-2">arrow_forward</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-page-card>

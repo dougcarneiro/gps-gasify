@@ -1,0 +1,29 @@
+/* Estilos para os cards de dashboard */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+}
+
+/* Estilos para ícones grandes */
+.dashboard-icon {
+  font-size: 4rem !important;
+  width: 4rem !important;
+  height: 4rem !important;
+}
+
+/* Animação suave para o hover */
+.transition-shadow {
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estilo para botões de ação */
+.dashboard-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}

@@ -15,6 +15,8 @@ import { OperacaoPerfilComponent } from './operacao-perfil/operacao-perfil.compo
 import { CaixaComponent } from './caixas/caixa.component';
 import { VendasComponent } from './vendas/vendas.component';
 import { DashboardVendasComponent } from './dashboard/vendas/dashboard-vendas.component';
+import { DashboardReceitasComponent } from './dashboard/receitas/dashboard-receitas.component';
+import { DashboardPanelsComponent } from './dashboard/dashboard-panels/dashboard-panels.component';
 
 const routes: Routes = [
   {
@@ -53,8 +55,18 @@ const routes: Routes = [
         component: OperacaoPerfilComponent,
       },
       {
-        path: 'operacao/dashboard',
+        path: 'dashboard',
+        component: DashboardPanelsComponent,
+        canActivate: [DashboardGuard],
+      },
+      {
+        path: 'dashboard/vendas',
         component: DashboardVendasComponent,
+        canActivate: [DashboardGuard],
+      },
+      {
+        path: 'dashboard/receitas',
+        component: DashboardReceitasComponent,
         canActivate: [DashboardGuard],
       },
       {

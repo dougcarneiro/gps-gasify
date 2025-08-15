@@ -8,12 +8,12 @@ import { DashboardVendasService } from '../services/dashboard-vendas.service';
 import { ChartColumnSize } from '../enums/chartColumnSize.enum';
 
 @Component({
-  selector: 'app-dashboard-vendas',
+  selector: 'app-dashboard-receitas',
   standalone: false,
-  templateUrl: './dashboard-vendas.component.html',
-  styleUrls: ['./dashboard-vendas.component.css']
+  templateUrl: './dashboard-receitas.component.html',
+  styleUrls: ['./dashboard-receitas.component.css']
 })
-export class DashboardVendasComponent {
+export class DashboardReceitasComponent {
   public initialChartsDefinitions: ChartDefinition[];
   activeDisplaySize = ChartColumnSize.Large;
 
@@ -23,18 +23,20 @@ export class DashboardVendasComponent {
   ) {
     this.initialChartsDefinitions = [
       {
-        chartTitle: ChartTitle.Sales,
-        chartOptions: CustomChartService.createCustomChart('area', 'Vendas', false),
-        seriesDataLabel: 'Vendas',
-        serviceMethod: (params: DashboardParams) => this.dashboardVendasService.getAllSoldItems(params),
+        chartTitle: ChartTitle.Revenue,
+        chartOptions: CustomChartService.createCustomChart('area', 'Receita', true),
+        seriesDataLabel: 'Receita',
+        serviceMethod: (params: DashboardParams) => this.dashboardVendasService.getAllSalesRevenue(params),
         toggleSlide: undefined,
+        moneyChart: true,
       },
       {
-        chartTitle: ChartTitle.SalesByCategory,
-        chartOptions: CustomChartService.createCustomChart('area', 'Vendas', false),
-        seriesDataLabel: 'Vendas',
-        serviceMethod: (params: DashboardParams) => this.dashboardVendasService.getSalesByProductCategory(params),
+        chartTitle: ChartTitle.RevenueByCategory,
+        chartOptions: CustomChartService.createCustomChart('area', 'Receita', true),
+        seriesDataLabel: 'Receita',
+        serviceMethod: (params: DashboardParams) => this.dashboardVendasService.getRevenueByProductCategory(params),
         toggleSlide: undefined,
+        moneyChart: true,
         multipleSeriesData: { enabled: true, groupName: 'receivedGroup' },
       },
     ];

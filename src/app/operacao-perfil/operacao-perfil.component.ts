@@ -65,6 +65,6 @@ export class OperacaoPerfilComponent implements OnInit {
   }
 
   navegarParaDashboard() {
-    this.router.navigate(['/operacao/dashboard']);
+    this.router.navigate(['/dashboard']);
   }
 }
