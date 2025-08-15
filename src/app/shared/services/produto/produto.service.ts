@@ -93,4 +93,17 @@ export class ProdutoService {
       throw new Error('Erro ao remover produto');
     }
   }
+
+  async atualizarEstoque(produtoId: string, novaQuantidade: number): Promise<void> {
+    try {
+      await this.produtoFirebaseService.atualizarEstoque(produtoId, novaQuantidade).toPromise();
+    } catch (error) {
+      console.error('Erro ao atualizar estoque:', error);
+      throw new Error('Erro ao atualizar estoque');
+    }
+  }
+
+  getProdutoPorId(produtoId: string): Observable<Produto> {
+    return this.produtoFirebaseService.pesquisarPorId(produtoId);
+  }
 }

@@ -3,18 +3,42 @@
   <mat-spinner diameter="36"></mat-spinner>
 </div>
 <mat-dialog-content [formGroup]="form" *ngIf="!isLoading">
+  <div *ngIf="produtoSelecionado" class="mb-4 p-3 bg-blue-50 rounded-md">
+    <p class="text-sm text-blue-700">
+      <strong>Produto selecionado:</strong> {{ produtoSelecionado.descricao }}<br>
+      <strong>Estoque disponível:</strong> {{ produtoSelecionado.quantidadeEstoque }} {{ produtoSelecionado.tipoUnidade }}(s) <br>
+      <strong>Preço:</strong> {{ produtoSelecionado.precoPorUnidade | currency:'BRL' }}<br>
+    </p>
+  </div>
   <mat-form-field class="w-full">
+
     <mat-label>Produto</mat-label>
     <mat-select formControlName="produto">
       <mat-option *ngFor="let produto of produtos" [value]="produto">
-        {{ produto.descricao }} - {{ produto.precoPorUnidade | currency:'BRL' }}
+        {{ produto.descricao }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
+
   <mat-form-field class="w-full">
     <mat-label>Quantidade</mat-label>
-    <input matInput type="number" formControlName="quantidade" min="1">
+    <input matInput type="number" formControlName="quantidade" min="1"
+           [max]="produtoSelecionado?.quantidadeEstoque!"
+           (blur)="onQuantidadeBlur()">
+    <mat-error *ngIf="form.get('quantidade')?.hasError('required')">
+      Quantidade é obrigatória.
+    </mat-error>
+    <mat-error *ngIf="form.get('quantidade')?.hasError('min')">
+      Quantidade deve ser maior que zero.
+    </mat-error>
+    <mat-error *ngIf="form.get('quantidade')?.hasError('max') && produtoSelecionado">
+      Quantidade não pode ser maior que o estoque disponível.
+    </mat-error>
+    <mat-error *ngIf="form.get('quantidade')?.hasError('estoqueInsuficiente') && produtoSelecionado">
+      Estoque insuficiente! Disponível: {{ produtoSelecionado.quantidadeEstoque }},
+      Solicitado: {{ form.get('quantidade')?.errors?.['estoqueInsuficiente']?.quantidadeSolicitada }}
+    </mat-error>
   </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions align="end" *ngIf="!isLoading">

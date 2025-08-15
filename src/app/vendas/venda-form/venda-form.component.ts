@@ -88,8 +88,9 @@ export class VendaFormComponent implements OnInit {
         this.dialogRef.close(true);
       })
       .catch(err => {
-        this.snackService.erro('Erro ao registrar venda.');
         console.error(err);
+        const errorMessage = err.message || 'Erro ao registrar venda.';
+        this.snackService.erro(errorMessage);
       })
       .finally(() => this.isLoading = false);
   }

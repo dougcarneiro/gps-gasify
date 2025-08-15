@@ -20,7 +20,7 @@ export class ProdutoListagemComponent {
   columnConfig: ColumnConfig[] = [
     { key: 'descricao', header: 'Nome', sortable: true, pipe: '' },
     { key: 'tipoUnidade', header: 'Tipo de Unidade', sortable: true, pipe: 'lowercase' },
-    { key: 'precoPorUnidade', header: 'Preço', sortable: true },
+    { key: 'precoPorUnidade', header: 'Preço', sortable: true, pipe: 'brlCurrency' },
     { key: 'quantidadeEstoque', header: 'Quantidade em Estoque', sortable: true },
     { key: 'status', header: 'Status', sortable: true, isBoolean: true },
   ];

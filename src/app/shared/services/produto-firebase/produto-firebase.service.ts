@@ -47,7 +47,7 @@ export class ProdutoFirebaseService {
     });
   }
 
-  pesquisarPorId(produtoId: string): Observable<Operation> {
+  pesquisarPorId(produtoId: string): Observable<Produto> {
     return runInInjectionContext(this.injetor, () => {
       return this.collectionProduct.doc(produtoId).get().pipe(
         map(doc => {
@@ -97,6 +97,15 @@ export class ProdutoFirebaseService {
     produto.updatedAt = new Date();
     return runInInjectionContext(this.injetor, () => {
       return from(this.collectionProduct.doc(produto.id).update({ ...produto }));
+    });
+  }
+
+  atualizarEstoque(produtoId: string, novaQuantidade: number): Observable<void> {
+    return runInInjectionContext(this.injetor, () => {
+      return from(this.collectionProduct.doc(produtoId).update({
+        quantidadeEstoque: novaQuantidade,
+        updatedAt: new Date()
+      }));
     });
   }
 }
