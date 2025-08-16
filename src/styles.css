@@ -39,3 +39,10 @@ body::before {
     filter: blur(4px);
     z-index: -1;
 }
+
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard .mat-pseudo-checkbox, .mat-button-toggle-group-appearance-standard .mat-pseudo-checkbox {
+  display: none !important;
+}
+.mat-button-toggle-checked .mat-button-toggle-button:has(.mat-button-toggle-checkbox-wrapper) {
+  padding-left: 0 !important;
+}
